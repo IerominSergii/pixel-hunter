@@ -5,14 +5,6 @@ const keyCodes = {
   LEFT_ARROW: 37,
   RIGHT_ARROW: 39
 };
-const START_SCREEN = 2;
-const userActions = {
-  pressedLeftArrow: `moveToLeftScreen`,
-  pressedRightArrow: `moveToRightScreen`,
-  clickedPrevButton: `moveToLeftScreen`,
-  clickedNextButton: `moveToRightScreen`,
-  notDefined: `notDefined`
-};
 
 // domElements
 const body = document.body;
@@ -27,16 +19,9 @@ const game2 = body.querySelector(`#game-2`);
 const game3 = body.querySelector(`#game-3`);
 const stats = body.querySelector(`#stats`);
 
+// variables
 const screenTemplates = [intro, greeting, rules, game1, game2, game3, stats];
-
-// state
-const screensState = {
-  current: START_SCREEN,
-  changeScreensState(newScreenId) {
-    screensState.current = newScreenId;
-    renderScreen(screensState.current);
-  }
-};
+let currentScreenIndex = 2;
 
 //  <--- start arrows buttons section --->
 const arrowsInnerHtml = `<div class="arrows__wrap">
@@ -52,10 +37,10 @@ const arrowsInnerHtml = `<div class="arrows__wrap">
     border: 2px solid black;
     padding: 5px 20px;
   }
-</style>
-<button class="arrows__btn"><-</button>
-<button class="arrows__btn">-></button>
-</div>`;
+  </style>
+  <button class="arrows__btn"><-</button>
+  <button class="arrows__btn">-></button>
+  </div>`;
 
 body.insertAdjacentHTML(`beforeEnd`, arrowsInnerHtml);
 
@@ -66,59 +51,6 @@ const nextButton = buttons[1];
 
 // <--- start switchScreen section --->
 // functions
-const removeChildren = (parentElement) => {
-  while (parentElement.lastChild) {
-    parentElement.removeChild(parentElement.lastChild);
-  }
-};
-
-const defineUserAction = (evt) => {
-  let action = userActions.notDefined;
-
-  if (evt.keyCode === keyCodes.LEFT_ARROW) {
-    action = userActions.pressedLeftArrow;
-  }
-
-  if (evt.keyCode === keyCodes.RIGHT_ARROW) {
-    action = userActions.pressedRightArrow;
-  }
-
-  if (evt.target === prevButton) {
-    action = userActions.clickedPrevButton;
-  }
-
-  if (evt.target === nextButton) {
-    action = userActions.clickedNextButton;
-  }
-
-  if (action !== userActions.notDefined) {
-    provideChangesToState(action);
-  }
-};
-
-const provideChangesToState = (action) => {
-  const {current} = screensState;
-  let newCurrentScreen = current;
-
-  switch (action) {
-    case `moveToLeftScreen`:
-      // check the screens limit
-      newCurrentScreen = current > 0 ? current - 1 : current;
-      break;
-    case `moveToRightScreen`:
-      // check the screens limit
-      newCurrentScreen =
-        current < screenTemplates.length - 1 ? current + 1 : current;
-      break;
-    default:
-      throw new Error(`Unknown user action`);
-  }
-
-  if (current !== newCurrentScreen) {
-    screensState.changeScreensState(newCurrentScreen);
-  }
-};
-
 const wrap = (it) => {
   const shadow = document.createElement(`div`);
   const content = it.content.cloneNode(true);
@@ -131,19 +63,63 @@ const renderScreen = (id) => {
     removeChildren(main);
   }
 
-  if (id >= screenTemplates.length || id < 0) {
-    throw new Error(`Wrong screen number`);
+  main.appendChild(wrap(screenTemplates[id]));
+};
+
+const removeChildren = (parentElement) => {
+  while (parentElement.lastChild) {
+    parentElement.removeChild(parentElement.lastChild);
+  }
+};
+
+const defineUserAction = (evt) => {
+  let action = `notDefined`;
+
+  if (evt.keyCode === keyCodes.LEFT_ARROW || evt.target === prevButton) {
+    action = `moveToPrevScreen`;
+  } else if (
+    evt.keyCode === keyCodes.RIGHT_ARROW ||
+    evt.target === nextButton
+  ) {
+    action = `moveToNextScreen`;
   }
 
-  const currentScreen = wrap(screenTemplates[id]);
+  return action;
+};
 
-  main.appendChild(currentScreen);
+const getNewCurrentScreenIndex = (action) => {
+  let newScreenIndex = currentScreenIndex;
+
+  if (action === `moveToPrevScreen`) {
+    return currentScreenIndex > 0 ? currentScreenIndex - 1 : currentScreenIndex;
+  } else if (action === `moveToNextScreen`) {
+    return currentScreenIndex < screenTemplates.length - 1
+      ? currentScreenIndex + 1
+      : currentScreenIndex;
+  }
+
+  return newScreenIndex;
+};
+
+const switchOverScreen = (evt) => {
+  const action = defineUserAction(evt);
+  currentScreenIndex = getNewCurrentScreenIndex(action);
+  renderScreen(currentScreenIndex);
+};
+
+// eventHandlers
+const buttonClickHandler = (evt) => {
+  switchOverScreen(evt);
+};
+
+const arrowButtonPressDownHandler = (evt) => {
+  switchOverScreen(evt);
 };
 //  <--- end switchScreen section --->
 
 // eventListeners
-prevButton.addEventListener(`click`, defineUserAction);
-nextButton.addEventListener(`click`, defineUserAction);
-document.addEventListener(`keydown`, defineUserAction);
+prevButton.addEventListener(`click`, buttonClickHandler);
+nextButton.addEventListener(`click`, buttonClickHandler);
+document.addEventListener(`keydown`, arrowButtonPressDownHandler);
 
-renderScreen(screensState.current);
+renderScreen(currentScreenIndex);
