@@ -1,12 +1,24 @@
 "use strict";
 
-const keyButtons = {
-  LEFT: 37,
-  RIGHT: 39
+// constant
+const keyCodes = {
+  LEFT_ARROW: 37,
+  RIGHT_ARROW: 39
+};
+const START_SCREEN = 2;
+const userActions = {
+  pressedLeftArrow: `moveToLeftScreen`,
+  pressedRightArrow: `moveToRightScreen`,
+  clickedPrevButton: `moveToLeftScreen`,
+  clickedNextButton: `moveToRightScreen`,
+  notDefined: `notDefined`
 };
 
+// domElements
 const body = document.body;
 const main = body.querySelector(`#main`);
+
+// screen templates
 const intro = body.querySelector(`#intro`);
 const greeting = body.querySelector(`#greeting`);
 const rules = body.querySelector(`#rules`);
@@ -15,11 +27,15 @@ const game2 = body.querySelector(`#game-2`);
 const game3 = body.querySelector(`#game-3`);
 const stats = body.querySelector(`#stats`);
 
-const screens = [intro, greeting, rules, game1, game2, game3, stats];
-const START_SCREEN = 2;
+const screenTemplates = [intro, greeting, rules, game1, game2, game3, stats];
 
+// state
 const screensState = {
-  current: START_SCREEN
+  current: START_SCREEN,
+  changeScreensState(newScreenId) {
+    screensState.current = newScreenId;
+    renderScreen(screensState.current);
+  }
 };
 
 //  <--- start arrows buttons section --->
@@ -56,28 +72,51 @@ const removeChildren = (parentElement) => {
   }
 };
 
-const switchScreens = (evt) => {
-  const {current} = screensState;
-  let newCurrentScreen = current;
-  const eventTarget = evt.target;
+const defineUserAction = (evt) => {
+  let action = userActions.notDefined;
 
-  if (evt.keyCode === keyButtons.LEFT || eventTarget === prevButton) {
-    // check the screens limit
-    newCurrentScreen = current > 0 ? current - 1 : current;
-  } else if (evt.keyCode === keyButtons.RIGHT || eventTarget === nextButton) {
-    // check the screens limit
-    newCurrentScreen = current < screens.length - 1 ? current + 1 : current;
+  if (evt.keyCode === keyCodes.LEFT_ARROW) {
+    action = userActions.pressedLeftArrow;
   }
 
-  if (current !== newCurrentScreen) {
-    changeScreensState(newCurrentScreen);
+  if (evt.keyCode === keyCodes.RIGHT_ARROW) {
+    action = userActions.pressedRightArrow;
+  }
+
+  if (evt.target === prevButton) {
+    action = userActions.clickedPrevButton;
+  }
+
+  if (evt.target === nextButton) {
+    action = userActions.clickedNextButton;
+  }
+
+  if (action !== userActions.notDefined) {
+    provideChangesToState(action);
   }
 };
 
-const changeScreensState = (newScreenId) => {
-  screensState.current = newScreenId;
+const provideChangesToState = (action) => {
+  const {current} = screensState;
+  let newCurrentScreen = current;
 
-  renderScreen(screensState.current);
+  switch (action) {
+    case `moveToLeftScreen`:
+      // check the screens limit
+      newCurrentScreen = current > 0 ? current - 1 : current;
+      break;
+    case `moveToRightScreen`:
+      // check the screens limit
+      newCurrentScreen =
+        current < screenTemplates.length - 1 ? current + 1 : current;
+      break;
+    default:
+      throw new Error(`Unknown user action`);
+  }
+
+  if (current !== newCurrentScreen) {
+    screensState.changeScreensState(newCurrentScreen);
+  }
 };
 
 const wrap = (it) => {
@@ -92,19 +131,19 @@ const renderScreen = (id) => {
     removeChildren(main);
   }
 
-  if (id >= screens.length) {
+  if (id >= screenTemplates.length || id < 0) {
     throw new Error(`Wrong screen number`);
   }
 
-  const currentScreen = wrap(screens[id]);
+  const currentScreen = wrap(screenTemplates[id]);
 
   main.appendChild(currentScreen);
 };
 //  <--- end switchScreen section --->
 
 // eventListeners
-prevButton.addEventListener(`click`, switchScreens);
-nextButton.addEventListener(`click`, switchScreens);
-document.addEventListener(`keydown`, switchScreens);
+prevButton.addEventListener(`click`, defineUserAction);
+nextButton.addEventListener(`click`, defineUserAction);
+document.addEventListener(`keydown`, defineUserAction);
 
 renderScreen(screensState.current);
