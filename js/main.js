@@ -58,66 +58,68 @@ const wrap = (it) => {
   return shadow.cloneNode(true);
 };
 
-const renderScreen = (id) => {
-  if (main.children.length) {
-    removeChildren(main);
-  }
-
-  main.appendChild(wrap(screenTemplates[id]));
-};
-
-const removeChildren = (parentElement) => {
+const clearChildren = (parentElement) => {
   while (parentElement.lastChild) {
     parentElement.removeChild(parentElement.lastChild);
   }
 };
 
-const defineUserAction = (evt) => {
-  let action = `notDefined`;
+const renderScreen = (id) => {
+  clearChildren(main);
 
-  if (evt.keyCode === keyCodes.LEFT_ARROW || evt.target === prevButton) {
-    action = `moveToPrevScreen`;
-  } else if (
-    evt.keyCode === keyCodes.RIGHT_ARROW ||
-    evt.target === nextButton
-  ) {
-    action = `moveToNextScreen`;
+  main.appendChild(wrap(screenTemplates[id]));
+};
+
+const changeScreenIndex = (action) => {
+  switch (action) {
+    case `toPrev`:
+      return currentScreenIndex > 0
+        ? currentScreenIndex - 1
+        : currentScreenIndex;
+    case `toNext`:
+      return currentScreenIndex < screenTemplates.length - 1
+        ? currentScreenIndex + 1
+        : currentScreenIndex;
+    default:
+      return currentScreenIndex;
   }
-
-  return action;
 };
 
-const getNewCurrentScreenIndex = (action) => {
-  let newScreenIndex = currentScreenIndex;
+const switchScreen = (action) => {
+  const newScreenIndex = changeScreenIndex(action);
 
-  if (action === `moveToPrevScreen`) {
-    return currentScreenIndex > 0 ? currentScreenIndex - 1 : currentScreenIndex;
-  } else if (action === `moveToNextScreen`) {
-    return currentScreenIndex < screenTemplates.length - 1
-      ? currentScreenIndex + 1
-      : currentScreenIndex;
+  if (currentScreenIndex !== newScreenIndex) {
+    currentScreenIndex = newScreenIndex;
+    renderScreen(currentScreenIndex);
   }
-
-  return newScreenIndex;
 };
 
-const switchOverScreen = (evt) => {
-  const action = defineUserAction(evt);
-  currentScreenIndex = getNewCurrentScreenIndex(action);
-  renderScreen(currentScreenIndex);
-};
-
-// eventHandlers
+// eventListeners
 const buttonClickHandler = (evt) => {
-  switchOverScreen(evt);
+  let action;
+
+  if (evt.target === prevButton) {
+    action = `toPrev`;
+  } else if (evt.target === nextButton) {
+    action = `toNext`;
+  }
+
+  switchScreen(action);
 };
 
 const arrowButtonPressDownHandler = (evt) => {
-  switchOverScreen(evt);
+  let action;
+
+  if (evt.keyCode === keyCodes.LEFT_ARROW) {
+    action = `toPrev`;
+  } else if (evt.keyCode === keyCodes.RIGHT_ARROW) {
+    action = `toNext`;
+  }
+
+  switchScreen(action);
 };
 //  <--- end switchScreen section --->
 
-// eventListeners
 prevButton.addEventListener(`click`, buttonClickHandler);
 nextButton.addEventListener(`click`, buttonClickHandler);
 document.addEventListener(`keydown`, arrowButtonPressDownHandler);
