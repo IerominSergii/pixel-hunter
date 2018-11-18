@@ -24,17 +24,24 @@ const screenTemplates = [intro, greeting, rules, game1, game2, game3, stats];
 let currentScreenIndex = 2;
 
 //  <--- start arrows buttons section --->
+const buttonsStyle = `<style>
+    .arrows__wrap {
+      position: absolute;
+      top: 95px;
+      left: 50%;
+      margin-left: -56px;
+    }
+    .arrows__btn {
+      background: none;
+      border: 2px solid black;
+      padding: 5px 20px;
+    }
+  </style>`;
+
 const createButton = (innerHtml, handler) => {
   const button = document.createElement(`button`);
   button.className = `arrows__btn`;
   button.innerHTML = innerHtml;
-  button.setAttribute(
-      `style`,
-      `background: none;
-  border: 2px solid black;
-  padding: 5px 20px;`
-  );
-
   button.addEventListener(`click`, handler);
 
   return button;
@@ -42,13 +49,7 @@ const createButton = (innerHtml, handler) => {
 
 const arrowButtons = document.createElement(`div`);
 arrowButtons.className = `arrows__wrap`;
-arrowButtons.setAttribute(
-    `style`,
-    `position: absolute;
-    top: 95px;
-    left: 50%;
-    margin-left: -56px;`
-);
+arrowButtons.insertAdjacentHTML(`afterBegin`, buttonsStyle);
 //  <--- end arrows buttons section --->
 
 // <--- start switchScreen section --->
@@ -80,36 +81,34 @@ const shouldGoNext = () => {
 };
 
 const goPrev = () => {
-  currentScreenIndex -= 1;
-  renderScreen(currentScreenIndex);
+  if (shouldGoPrev()) {
+    currentScreenIndex -= 1;
+    renderScreen(currentScreenIndex);
+  }
 };
 
 const goNext = () => {
-  currentScreenIndex += 1;
-  renderScreen(currentScreenIndex);
+  if (shouldGoNext()) {
+    currentScreenIndex += 1;
+    renderScreen(currentScreenIndex);
+  }
 };
 
 // eventListeners
 const arrowButtonKeyDownHandler = (evt) => {
-  if (evt.keyCode === keyCodes.LEFT_ARROW && shouldGoPrev()) {
+  if (evt.keyCode === keyCodes.LEFT_ARROW) {
     goPrev();
-  }
-
-  if (evt.keyCode === keyCodes.RIGHT_ARROW && shouldGoNext()) {
+  } else if (evt.keyCode === keyCodes.RIGHT_ARROW) {
     goNext();
   }
 };
 
 const prevButtonClickHandler = () => {
-  if (shouldGoPrev()) {
-    goPrev();
-  }
+  goPrev();
 };
 
 const nextButtonClickHandler = () => {
-  if (shouldGoNext()) {
-    goNext();
-  }
+  goNext();
 };
 //  <--- end switchScreen section --->
 
