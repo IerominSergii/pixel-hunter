@@ -24,7 +24,7 @@ const screenTemplates = [intro, greeting, rules, game1, game2, game3, stats];
 let currentScreenIndex = 2;
 
 //  <--- start arrows buttons section --->
-const createButton = (innerHtml) => {
+const createButton = (innerHtml, handler) => {
   const button = document.createElement(`button`);
   button.className = `arrows__btn`;
   button.innerHTML = innerHtml;
@@ -35,11 +35,10 @@ const createButton = (innerHtml) => {
   padding: 5px 20px;`
   );
 
+  button.addEventListener(`click`, handler);
+
   return button;
 };
-
-const prevButton = createButton(`<-`);
-const nextButton = createButton(`->`);
 
 const arrowButtons = document.createElement(`div`);
 arrowButtons.className = `arrows__wrap`;
@@ -50,9 +49,6 @@ arrowButtons.setAttribute(
     left: 50%;
     margin-left: -56px;`
 );
-
-arrowButtons.appendChild(prevButton);
-arrowButtons.appendChild(nextButton);
 //  <--- end arrows buttons section --->
 
 // <--- start switchScreen section --->
@@ -118,8 +114,11 @@ const nextButtonClickHandler = () => {
 //  <--- end switchScreen section --->
 
 document.addEventListener(`keydown`, arrowButtonKeyDownHandler);
-prevButton.addEventListener(`click`, prevButtonClickHandler);
-nextButton.addEventListener(`click`, nextButtonClickHandler);
 
+const prevButton = createButton(`<-`, prevButtonClickHandler);
+const nextButton = createButton(`->`, nextButtonClickHandler);
+arrowButtons.appendChild(prevButton);
+arrowButtons.appendChild(nextButton);
 body.appendChild(arrowButtons);
+
 renderScreen(currentScreenIndex);
