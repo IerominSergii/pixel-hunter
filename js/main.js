@@ -83,30 +83,36 @@ const shouldGoNext = () => {
   return currentScreenIndex < screenTemplates.length - 1;
 };
 
+const goPrev = () => {
+  currentScreenIndex -= 1;
+  renderScreen(currentScreenIndex);
+};
+
+const goNext = () => {
+  currentScreenIndex += 1;
+  renderScreen(currentScreenIndex);
+};
+
 // eventListeners
 const arrowButtonKeyDownHandler = (evt) => {
   if (evt.keyCode === keyCodes.LEFT_ARROW && shouldGoPrev()) {
-    currentScreenIndex -= 1;
-    renderScreen(currentScreenIndex);
+    goPrev();
   }
 
   if (evt.keyCode === keyCodes.RIGHT_ARROW && shouldGoNext()) {
-    currentScreenIndex += 1;
-    renderScreen(currentScreenIndex);
+    goNext();
   }
 };
 
 const prevButtonClickHandler = () => {
   if (shouldGoPrev()) {
-    currentScreenIndex -= 1;
-    renderScreen(currentScreenIndex);
+    goPrev();
   }
 };
 
 const nextButtonClickHandler = () => {
   if (shouldGoNext()) {
-    currentScreenIndex += 1;
-    renderScreen(currentScreenIndex);
+    goNext();
   }
 };
 //  <--- end switchScreen section --->
