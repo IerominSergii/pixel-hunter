@@ -72,23 +72,15 @@ const renderScreen = (id) => {
   main.appendChild(wrap(screenTemplates[id]));
 };
 
-const shouldGoPrev = () => {
-  return currentScreenIndex > 0;
-};
-
-const shouldGoNext = () => {
-  return currentScreenIndex < screenTemplates.length - 1;
-};
-
 const goPrev = () => {
-  if (shouldGoPrev()) {
+  if (currentScreenIndex > 0) {
     currentScreenIndex -= 1;
     renderScreen(currentScreenIndex);
   }
 };
 
 const goNext = () => {
-  if (shouldGoNext()) {
+  if (currentScreenIndex < screenTemplates.length - 1) {
     currentScreenIndex += 1;
     renderScreen(currentScreenIndex);
   }
