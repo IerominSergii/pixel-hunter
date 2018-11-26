@@ -1,5 +1,5 @@
-import {createElement, changeScreen} from "../util";
-import greetingScreen from "./greeting";
+import {createElement} from "./../util/util";
+import addEventListenerToBackArrow from "./../util/backToGreeting";
 
 const statsTemplate = `<header class="header">
   <button class="back">
@@ -136,12 +136,7 @@ const statsTemplate = `<header class="header">
 </section>`;
 
 const statsScreen = createElement(statsTemplate);
-const backButton = statsScreen.querySelector(`.back`);
 
-const backButtonClickHandler = () => {
-  changeScreen(greetingScreen);
-};
-
-backButton.addEventListener(`click`, backButtonClickHandler);
+addEventListenerToBackArrow(statsScreen);
 
 export default statsScreen;

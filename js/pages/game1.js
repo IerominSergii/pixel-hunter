@@ -1,6 +1,6 @@
-import {createElement, changeScreen} from "../util";
+import {createElement, changeScreen} from "./../util/util";
+import addEventListenerToBackArrow from "./../util/backToGreeting";
 import game2Screen from "./game2";
-import greetingScreen from "./greeting";
 
 const game1Template = `<header class="header">
   <button class="back">
@@ -124,7 +124,6 @@ const game1Template = `<header class="header">
 const game1Screen = createElement(game1Template);
 
 const gameForm = game1Screen.querySelector(`.game__content`);
-const backButton = game1Screen.querySelector(`.back`);
 
 const gameFormChangeHandler = () => {
   const checkedInputs = gameForm.querySelectorAll(`input:checked`);
@@ -133,11 +132,8 @@ const gameFormChangeHandler = () => {
   }
 };
 
-const backButtonClickHandler = () => {
-  changeScreen(greetingScreen);
-};
-
 gameForm.addEventListener(`change`, gameFormChangeHandler);
-backButton.addEventListener(`click`, backButtonClickHandler);
+
+addEventListenerToBackArrow(game1Screen);
 
 export default game1Screen;

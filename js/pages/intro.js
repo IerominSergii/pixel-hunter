@@ -1,4 +1,4 @@
-import {createElement, changeScreen} from "./../util";
+import {createElement, changeScreen} from "./../util/util";
 import greetingScreen from "./greeting";
 
 const introTemplate = `<section class="intro">

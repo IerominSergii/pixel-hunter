@@ -1,6 +1,6 @@
-import {createElement, changeScreen} from "../util";
+import {createElement, changeScreen} from "./../util/util";
+import addEventListenerToBackArrow from "./../util/backToGreeting";
 import game1Screen from "./game1";
-import greetingScreen from "./greeting";
 
 const rulesTemplate = `<header class="header">
 <button class="back">
@@ -65,7 +65,6 @@ const rulesScreen = createElement(rulesTemplate);
 const rulesForm = rulesScreen.querySelector(`.rules__form`);
 const rulesInput = rulesForm.querySelector(`.rules__input`);
 const rulesButton = rulesForm.querySelector(`.rules__button`);
-const backButton = rulesScreen.querySelector(`.back`);
 
 const rulesInputInputHandler = () => {
   if (rulesInput.value) {
@@ -79,12 +78,9 @@ const rulesFormSubmitHandler = () => {
   changeScreen(game1Screen);
 };
 
-const backButtonClickHandler = () => {
-  changeScreen(greetingScreen);
-};
-
 rulesInput.addEventListener(`input`, rulesInputInputHandler);
 rulesForm.addEventListener(`submit`, rulesFormSubmitHandler);
-backButton.addEventListener(`click`, backButtonClickHandler);
+
+addEventListenerToBackArrow(rulesScreen);
 
 export default rulesScreen;

@@ -1,4 +1,4 @@
-import {createElement, changeScreen} from "./../util";
+import {createElement, changeScreen} from "./../util/util";
 import rulesScreen from "./rules";
 
 const greetingTemplate = `<section class="greeting central--blur">
