@@ -1,4 +1,5 @@
-import {ANSWER_POINTS, SAVED_LIFE_VALUE, LEVEL_AMOUNT} from "./configuration";
+import {ANSWER_POINTS, SAVED_LIFE_VALUE} from "./configuration";
+import isLose from "./is-lose";
 
 const checkLives = (lives) => {
   if (lives < 0) {
@@ -14,10 +15,6 @@ const checkAnswer = (answer) => {
   if (isNaN(ANSWER_POINTS[answer])) {
     throw new Error(`Unknown answer type, check the 'ANSWER_POINTS' object`);
   }
-};
-
-const isLose = (answersAmount) => {
-  return answersAmount < LEVEL_AMOUNT ? true : false;
 };
 
 const countPoints = (state) => {
