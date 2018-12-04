@@ -1,4 +1,4 @@
-import {ANSWER_POINTS, SAVED_LIFE_VALUE} from "./configuration";
+import {ANSWER_POINTS, SAVED_LIFE_VALUE, LEVEL_AMOUNT} from "./configuration";
 import isLose from "./is-lose";
 
 const checkLives = (lives) => {
@@ -17,10 +17,10 @@ const checkAnswer = (answer) => {
   }
 };
 
-const countPoints = (state) => {
-  let {answers, lives, finalResult} = state;
+const countPoints = (answers, lives) => {
+  let finalResult;
 
-  if (isLose(answers.length)) {
+  if (isLose(lives) || answers.length < LEVEL_AMOUNT) {
     finalResult = -1;
   } else {
     checkLives(lives);
@@ -36,7 +36,7 @@ const countPoints = (state) => {
     finalResult = answersResult + lives * SAVED_LIFE_VALUE;
   }
 
-  return Object.assign({}, state, {finalResult});
+  return finalResult;
 };
 
 export default countPoints;

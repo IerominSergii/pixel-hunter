@@ -2,9 +2,8 @@ export const INITIAL_STATE = Object.freeze({
   name: ``,
   level: 0,
   lives: 3,
-  isDead: false,
   answers: [],
-  finalResult: 0
+  timer: 0
 });
 
 export const ANSWER_POINTS = {

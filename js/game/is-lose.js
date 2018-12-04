@@ -1,7 +1,5 @@
-import {LEVEL_AMOUNT} from "./configuration";
-
-const isLose = (answersAmount) => {
-  return answersAmount < LEVEL_AMOUNT ? true : false;
+const isLose = (lives) => {
+  return lives < 0;
 };
 
 export default isLose;

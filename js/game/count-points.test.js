@@ -1,6 +1,5 @@
 import {assert} from "chai";
 import countPoints from "./count-points";
-import {INITIAL_STATE} from "./configuration";
 
 const correctAnswers = [
   `correct`,
@@ -19,16 +18,14 @@ describe(`countPoints. Correct results:`, () => {
   it(`should return 1000 if all answers are correct. Left lives - 0.`, () => {
     const answers = correctAnswers;
     const lives = 0;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
-    assert.equal(countPoints(testState).finalResult, 1000);
+    assert.equal(countPoints(answers, lives), 1000);
   });
   it(`should return 1050 if all answers are correct. Left lives - 1.`, () => {
     const answers = correctAnswers;
     const lives = 1;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
-    assert.equal(countPoints(testState).finalResult, 1050);
+    assert.equal(countPoints(answers, lives), 1050);
   });
   it(`should return 1200 if all answers are correct. Left lives - 3.`, () => {
     const answers = [
@@ -44,16 +41,14 @@ describe(`countPoints. Correct results:`, () => {
       `correct`
     ];
     const lives = 3;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
-    assert.equal(countPoints(testState).finalResult, 1200);
+    assert.equal(countPoints(answers, lives), 1200);
   });
   it(`should return '-1' if the answers amount is less than 10.`, () => {
     const answers = [`correct`, `correct`, `correct`];
     const lives = 1;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
-    assert.equal(countPoints(testState).finalResult, -1);
+    assert.equal(countPoints(answers, lives), -1);
   });
 });
 
@@ -72,10 +67,9 @@ describe(`countPoints. Incorrect results:`, () => {
       `correct`
     ];
     const lives = 1;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
     assert.throws(() => {
-      countPoints(testState);
+      countPoints(answers, lives);
     }, /Unknown answer type, check the 'ANSWER_POINTS' object/);
   });
   it(`shouldn't work with not string type results`, () => {
@@ -92,19 +86,15 @@ describe(`countPoints. Incorrect results:`, () => {
       `correct`
     ];
     const lives = 1;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
     assert.throws(() => {
-      countPoints(testState);
+      countPoints(answers, lives);
     }, /Answer should be in string type/);
   });
   it(`Lives amount shouldn't be negative`, () => {
     const answers = correctAnswers;
     const lives = -1;
-    const testState = Object.assign({}, INITIAL_STATE, {answers, lives});
 
-    assert.throws(() => {
-      countPoints(testState);
-    }, /Lives amount shouldn't be negative/);
+    assert.equal(countPoints(answers, lives), -1);
   });
 });

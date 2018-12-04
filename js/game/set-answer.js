@@ -3,10 +3,13 @@ const setAnswer = (state, newAnswer) => {
     throw new Error(`Wrong newAnswer type, should be string.`);
   }
 
-  const {answers} = state;
-  answers.push(newAnswer);
+  const newAnswers = state.answers.slice();
+  newAnswers.push(newAnswer);
 
-  return Object.assign({}, state, {answers});
+  const newState = Object.assign({}, state, {
+    answers: Object.freeze(newAnswers)
+  });
+  return Object.freeze(newState);
 };
 
 export default setAnswer;

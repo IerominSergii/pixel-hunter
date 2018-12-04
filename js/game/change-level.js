@@ -7,7 +7,7 @@ const changeLevel = (state, level) => {
     throw new Error(`Level should be only number type.`);
   }
   const newState = Object.assign({}, state, {level});
-  return newState;
+  return Object.freeze(newState);
 };
 
 export default changeLevel;
