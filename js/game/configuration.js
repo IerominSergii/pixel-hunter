@@ -1,10 +1,13 @@
-export const INITIAL_STATE = Object.freeze({
-  name: ``,
-  level: 0,
-  lives: 3,
-  answers: [],
-  timer: 0
-});
+export const getInitialState = () => {
+  return Object.freeze({
+    name: ``,
+    lives: 3,
+    answers: Object.freeze([]),
+    questions: Object.freeze([]),
+    currentQuestion: 0,
+    timer: 0
+  });
+};
 
 export const ANSWER_POINTS = {
   correct: 100,
@@ -13,8 +16,13 @@ export const ANSWER_POINTS = {
   wrong: 0
 };
 
+export const ANSWERS_TYPES = {
+  CORRECT: `correct`,
+  FAST: `fast`,
+  SLOW: `slow`,
+  WRONG: `wrong`
+};
+
 export const SAVED_LIFE_VALUE = 50;
-export const MAX_LIVES_AMOUNT = 3;
-export const LEVEL_AMOUNT = 10;
-export const GAME_LEVELS = 10;
-export const MAX_TIMER_VALUE = 30;
+export const DEFAULT_LIVES = 3;
+export const DEFAULT_TIMER = 30;

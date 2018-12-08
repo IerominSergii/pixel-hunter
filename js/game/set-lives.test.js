@@ -1,16 +1,24 @@
 import {assert} from "chai";
 import setLives from "./set-lives";
+import {getInitialState} from "./configuration";
+
+const state = getInitialState();
 
 describe(`setLives`, () => {
   it(`should set new life`, () => {
-    assert.equal(setLives(3, `wrong`), 2);
-    assert.equal(setLives(3, `correct`), 3);
-    assert.equal(setLives(3, `fast`), 3);
-    assert.equal(setLives(3, `slow`), 3);
+    assert.equal(setLives(state, 0).lives, 0);
+    assert.equal(setLives(state, 1).lives, 1);
+    assert.equal(setLives(state, 2).lives, 2);
+    assert.equal(setLives(state, 3).lives, 3);
   });
-  it(`shouldn't work with not string answer type`, () => {
+  it(`shouldn't work with not string lives type`, () => {
     assert.throws(() => {
-      setLives(3, {});
-    }, /Wrong answer type./);
+      setLives(state, {});
+    }, /Wrong lives type, should be the number./);
+  });
+  it(`shouldn't work with negative lives amount`, () => {
+    assert.throws(() => {
+      setLives(state, -5);
+    }, /Lives should not be negative/);
   });
 });

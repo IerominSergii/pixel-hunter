@@ -1,23 +1,19 @@
 import {assert} from "chai";
 import changeLevel from "./change-level";
-import {INITIAL_STATE} from "./configuration";
+import {getInitialState} from "./configuration";
+import setQuestions from "./set-questions";
+import setCurrentQuestion from "./set-current-question";
+
+const questions = [1, 2, 3, 4, 5];
+const newState = setQuestions(getInitialState(), questions);
 
 describe(`changeLevel`, () => {
-  it(`should return new level`, () => {
-    assert.equal(changeLevel(INITIAL_STATE, 2).level, 2);
-    assert.equal(changeLevel(INITIAL_STATE, 6).level, 6);
-    assert.equal(changeLevel(INITIAL_STATE, 9).level, 9);
+  it(`should return new currentQuestion`, () => {
+    assert.equal(changeLevel(newState).currentQuestion, 1);
   });
-  it(`shouldn't allow set the negative value`, () => {
-    assert.throws(
-        () => changeLevel(INITIAL_STATE, -2).level,
-        /Level shouldn't be negative./
-    );
-  });
-  it(`shouldn't allow set not number type`, () => {
-    assert.throws(
-        () => changeLevel(INITIAL_STATE, []).level,
-        /Level should be only number type./
-    );
+  it(`should not return new currentQuestion`, () => {
+    const testState = setCurrentQuestion(newState, 5);
+
+    assert.equal(changeLevel(testState).currentQuestion, 5);
   });
 });

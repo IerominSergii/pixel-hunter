@@ -7,7 +7,7 @@ describe(`defineAnswer`, () => {
     assert.equal(defineAnswer(true, 5), `slow`);
     assert.equal(defineAnswer(true, 25), `fast`);
     assert.equal(defineAnswer(false, 25), `wrong`);
-    assert.equal(defineAnswer(true, 0), `wrong`);
+    assert.equal(defineAnswer(true, 0), `slow`);
   });
   it(`shouldn't work with incorrect type data`, () => {
     assert.throws(() => {

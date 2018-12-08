@@ -1,22 +1,22 @@
 import {assert} from "chai";
 import setTimerTime from "./set-timer-time";
-import {INITIAL_STATE} from "./configuration";
+import {getInitialState} from "./configuration";
 
 describe(`setTimerTime. Correct results:`, () => {
-  it(`should decrease the time`, () => {
-    assert.equal(setTimerTime(INITIAL_STATE, 30).timer, 30);
+  it(`should set the time`, () => {
+    assert.equal(setTimerTime(getInitialState(), 30).timer, 30);
   });
 });
 
 describe(`setTimerTime. Incorrect results:`, () => {
-  it(`shouldn't work with negative time value or 0 or more than MAX_TIMER_VALUE`, () => {
+  it(`shouldn't work with negative time value`, () => {
     assert.throws(() => {
-      setTimerTime(INITIAL_STATE, -30);
-    }, /Time shouldn't be negative, equal 0 or more than MAX_TIMER_VALUE/);
+      setTimerTime(getInitialState(), -3);
+    }, /Time shouldn't be negative/);
   });
-  it(`shouldn't decrease the time if the time is equal 0`, () => {
+  it(`shouldn't allow not number type timeValue`, () => {
     assert.throws(() => {
-      setTimerTime(INITIAL_STATE, 0);
-    }, /Time shouldn't be negative, equal 0 or more than MAX_TIMER_VALUE/);
+      setTimerTime(getInitialState(), []);
+    }, /Time type should be number/);
   });
 });

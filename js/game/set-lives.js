@@ -1,15 +1,13 @@
-const setLives = (livesAmount, currentAnswer) => {
-  let newLivesAmount = livesAmount;
-
-  if (typeof currentAnswer !== `string`) {
-    throw new Error(`Wrong answer type.`);
+const setLives = (state, lives) => {
+  if (typeof lives !== `number`) {
+    throw new Error(`Wrong lives type, should be the number.`);
   }
 
-  if (currentAnswer === `wrong`) {
-    newLivesAmount = livesAmount - 1;
+  if (lives < 0) {
+    throw new Error(`Lives should not be negative`);
   }
 
-  return newLivesAmount;
+  return Object.freeze(Object.assign({}, state, {lives}));
 };
 
 export default setLives;

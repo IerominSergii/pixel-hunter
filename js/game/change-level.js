@@ -1,13 +1,19 @@
-const changeLevel = (state, level) => {
-  if (level < 0) {
-    throw new Error(`Level shouldn't be negative.`);
+import hasNextLevel from "./has-next-level";
+import setCurrentQuestion from "./set-current-question";
+
+const changeLevel = (state) => {
+  const {currentQuestion, questions} = state;
+  let newCurrentQuestion = currentQuestion;
+
+  if (hasNextLevel(questions.length, currentQuestion)) {
+    newCurrentQuestion = currentQuestion + 1;
   }
 
-  if (typeof level !== `number`) {
-    throw new Error(`Level should be only number type.`);
-  }
-  const newState = Object.assign({}, state, {level});
-  return Object.freeze(newState);
+  const newState = setCurrentQuestion(state, newCurrentQuestion);
+
+  return Object.freeze(
+      Object.assign({}, newState, {currentQuestion: newCurrentQuestion})
+  );
 };
 
 export default changeLevel;
