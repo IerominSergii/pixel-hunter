@@ -1,7 +1,7 @@
 export const getInitialState = () => {
   return Object.freeze({
     name: ``,
-    lives: 3,
+    lives: DEFAULT_LIVES,
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,
