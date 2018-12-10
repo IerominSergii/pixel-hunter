@@ -47,8 +47,8 @@ describe(`countPoints. Correct results:`, () => {
     assert.equal(countPoints(answers, lives, questionsAmount), 1200);
   });
   it(`should return '-1' if the answers amount is less than questionsAmount.`, () => {
-    const answers = [`correct`, `correct`, `correct`];
-    const lives = 1;
+    const answers = [`wrong`, `wrong`, `wrong`, `wrong`];
+    const lives = -1;
 
     assert.equal(countPoints(answers, lives, questionsAmount), -1);
   });
