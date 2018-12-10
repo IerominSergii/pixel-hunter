@@ -1,5 +1,5 @@
-import {createElement} from "./../util/util";
-import addEventListenerToBackArrow from "./../util/backToGreeting";
+import {createElement} from "../util/util";
+import addEventListenerToBackArrow from "../util/backToGreeting";
 
 const statsTemplate = `<header class="header">
   <button class="back">
