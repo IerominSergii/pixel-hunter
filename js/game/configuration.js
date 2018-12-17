@@ -2,6 +2,7 @@ export const getInitialState = () => {
   return Object.freeze({
     name: ``,
     lives: DEFAULT_LIVES,
+    isGameFinished: false,
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,
@@ -15,6 +16,9 @@ export const ANSWER_POINTS = {
   slow: 50,
   wrong: 0
 };
+
+export const FAST_BONUS = 50;
+export const SLOW_BONUS = 50;
 
 export const ANSWERS_TYPES = {
   CORRECT: `correct`,

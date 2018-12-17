@@ -12,6 +12,7 @@ import setLives from "./set-lives";
 import canContinue from "./canContinue";
 import statsScreen from "../pages/stats";
 import isAnswerCorrect from "./is-answer-correct";
+import getFinish from "./get-finish";
 
 const INITIAL_STATE = getInitialState();
 
@@ -22,6 +23,7 @@ const startGame = () => {
   const gameContainerElement = createElement();
   const headerElement = createElement();
   const questionElement = createElement();
+  const statsElement = createElement();
 
   gameContainerElement.appendChild(headerElement);
   gameContainerElement.appendChild(questionElement);
@@ -31,16 +33,18 @@ const startGame = () => {
     questionElement.innerHTML = questionView(gameState);
   };
 
+  const endGame = (gameState) => {
+    headerElement.innerHTML = headerTemplate(gameState);
+    statsElement.innerHTML = statsScreen(gameState);
+    changeScreen(statsElement);
+  };
+
   const defineHandler = (type, element, handler) => {
+    const gameOption = element.querySelector(`.game__content`);
     if (type === questionsType.TRIPLE) {
-      const gameOption = element.querySelector(`.game__content`);
       gameOption.addEventListener(`click`, handler);
     } else {
-      const gameOptions = element.querySelectorAll(`.game__answer`);
-
-      for (let option of gameOptions) {
-        option.addEventListener(`click`, handler);
-      }
+      gameOption.addEventListener(`change`, handler);
     }
   };
 
@@ -62,7 +66,8 @@ const startGame = () => {
         const questionType = state.questions[state.currentQuestion].type;
         defineHandler(questionType, questionElement, userEventHandler);
       } else {
-        changeScreen(statsScreen);
+        state = getFinish(state);
+        endGame(state);
       }
     }
   };
