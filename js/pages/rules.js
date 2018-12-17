@@ -1,6 +1,6 @@
-import {createElement, changeScreen} from "./../util/util";
-import addEventListenerToBackArrow from "./../util/backToGreeting";
-import game1Screen from "./game1";
+import {createElement} from "./../util/util";
+// import addEventListenerToBackArrow from "./../util/backToGreeting";
+import startGame from "../game/start-game";
 
 const rulesTemplate = `<header class="header">
 <button class="back">
@@ -53,7 +53,7 @@ const rulesTemplate = `<header class="header">
 </ul>
 <p class="rules__ready">Готовы?</p>
 <form class="rules__form">
-  <input class="rules__input" type="text" placeholder="Ваше Имя" />
+  <input class="rules__input" type="text" placeholder="Ваше Имя" autofocus />
   <button class="rules__button continue" type="submit" disabled>
     Go!
   </button>
@@ -75,12 +75,13 @@ const rulesInputInputHandler = () => {
 };
 
 const rulesFormSubmitHandler = () => {
-  changeScreen(game1Screen);
+  startGame();
 };
 
 rulesInput.addEventListener(`input`, rulesInputInputHandler);
 rulesForm.addEventListener(`submit`, rulesFormSubmitHandler);
+rulesInput.focus();
 
-addEventListenerToBackArrow(rulesScreen);
+// addEventListenerToBackArrow(rulesScreen);
 
 export default rulesScreen;

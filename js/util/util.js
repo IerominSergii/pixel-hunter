@@ -7,7 +7,7 @@ export const clearChildren = (parentElement) => {
 };
 
 // template must not be multiply
-export const createElement = (template) => {
+export const createElement = (template = ``) => {
   const newElement = document.createElement(`div`);
 
   newElement.innerHTML = template;

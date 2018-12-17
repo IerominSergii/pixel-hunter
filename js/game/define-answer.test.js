@@ -17,7 +17,7 @@ describe(`defineAnswer`, () => {
       defineAnswer(true, []);
     }, /wrong time type, should be number./);
     assert.throws(() => {
-      defineAnswer(true, {});
+      defineAnswer(false, {});
     }, /wrong time type, should be number./);
   });
 });

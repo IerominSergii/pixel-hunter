@@ -1,5 +1,4 @@
 import {DEFAULT_LIVES} from "../game/configuration";
-import addEventListenerToBackArrow from "../util/backToGreeting";
 
 const renderGoBackButton = () => {
   const backButton = `<button class="back">
@@ -23,15 +22,14 @@ const renderGoBackButton = () => {
     <use xlink:href="img/sprite.svg#logo-small"></use>
   </svg>
 </button>`;
-  addEventListenerToBackArrow(backButton);
   return backButton;
 };
 
-const renderTimer = (time) => {
+const getTimerTemplate = (time) => {
   return `<div class="game__timer">${time}</div>`;
 };
 
-const renderLives = (lives) => {
+const getLivesTemplate = (lives) => {
   return `<div class="game__lives">
   ${new Array(lives)
     .fill(
@@ -62,7 +60,7 @@ const renderLives = (lives) => {
 export default (state) => {
   return `<header class="header">
   ${renderGoBackButton()}
-  ${renderTimer(state.timer)}
-  ${renderLives(state.lives)}
+  ${getTimerTemplate(state.timer)}
+  ${getLivesTemplate(state.lives)}
   </header>`;
 };

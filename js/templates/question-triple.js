@@ -3,6 +3,7 @@ const renderOption = (option, index) => {
   <img
     src="${option.src}"
     alt="Option ${index + 1}"
+    data-answer="${option.thisIs}"
     width="304"
     height="455"
   />
