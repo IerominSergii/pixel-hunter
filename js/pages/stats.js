@@ -6,7 +6,6 @@ import {
   FAST_BONUS,
   SLOW_BONUS
 } from "../game/configuration";
-import headerTemplate from "../views/header";
 
 const getTotalResults = (answers) => {
   const correctAnswers = answers.filter((answer) => {
@@ -29,7 +28,7 @@ const getLivesBonus = (lives) => {
 };
 
 export default (state) => {
-  const {answers, lives, questions} = state;
+  const {name, answers, lives, questions} = state;
   const totalResultFinal = countPoints(answers, lives, questions.length);
   const fastAnswers = answers.filter((answer) => {
     return answer === ANSWERS_TYPES.FAST;
@@ -95,7 +94,7 @@ export default (state) => {
   const getPlayerTemplate = () => {
     return `<table class="result__table">
     <tr>
-      <td class="result__number">1.</td>
+      <td class="result__number">1. ${name}</td>
       <td colspan="2">
       ${getAnswersTemplate(answers)}
       </td>
@@ -109,8 +108,7 @@ export default (state) => {
   </table>`;
   };
 
-  return `${headerTemplate(state)}
-  <section class="result">
+  return `<section class="result">
     ${getTitleTemplate(totalResultFinal)}
     ${getPlayerTemplate()}
   </section>`;

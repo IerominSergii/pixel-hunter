@@ -1,5 +1,5 @@
 import {createElement, changeScreen} from "./../util/util";
-import rulesScreen from "./rules";
+import rulesElement from "./rules";
 
 const greetingTemplate = `<section class="greeting central--blur">
 <img
@@ -40,14 +40,18 @@ const greetingTemplate = `<section class="greeting central--blur">
 </button>
 </section>`;
 
-const greetingScreen = createElement(greetingTemplate);
+const greetingElement = (handler, headerElement) => {
+  const greeting = createElement(greetingTemplate);
 
-const greetingContinue = greetingScreen.querySelector(`.greeting__continue`);
+  const greetingContinue = greeting.querySelector(`.greeting__continue`);
 
-const greetingContinueClickHandler = () => {
-  changeScreen(rulesScreen);
+  const greetingHandler = () => {
+    changeScreen(rulesElement(handler, headerElement));
+  };
+
+  greetingContinue.addEventListener(`click`, greetingHandler);
+
+  return greeting;
 };
 
-greetingContinue.addEventListener(`click`, greetingContinueClickHandler);
-
-export default greetingScreen;
+export default greetingElement;

@@ -1,5 +1,5 @@
-import {createElement, changeScreen} from "./../util/util";
-import greetingScreen from "./greeting";
+import {createElement} from "./../util/util";
+import startGame from "../game/start-game";
 
 const introTemplate = `<section class="intro">
   <button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
@@ -11,7 +11,7 @@ const introScreen = createElement(introTemplate);
 const asterisk = introScreen.querySelector(`.intro__asterisk`);
 
 const asteriskClickHandler = () => {
-  changeScreen(greetingScreen);
+  startGame();
 };
 
 asterisk.addEventListener(`click`, asteriskClickHandler);
