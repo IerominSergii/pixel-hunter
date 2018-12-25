@@ -6,7 +6,7 @@ export const getInitialState = () => {
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,
-    timer: 0
+    timer: DEFAULT_TIMER
   });
 };
 
@@ -36,4 +36,4 @@ export const questionsType = {
 
 export const SAVED_LIFE_VALUE = 50;
 export const DEFAULT_LIVES = 3;
-export const DEFAULT_TIMER = 30;
+export const DEFAULT_TIMER = 7;

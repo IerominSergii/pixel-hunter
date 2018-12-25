@@ -6,12 +6,9 @@ const isAnswerCorrect = (currentQuestion, evt) => {
   const type = question.type;
   const options = question.options;
 
-  // const gameForm = document.querySelector(`.game__content`);
-
   switch (type) {
     case questionsType.SINGLE:
       const checkedInput = document.querySelector(`input:checked`).value;
-      // const userSingleAnswer = checkedInput.value;
 
       return checkedInput === options[0].thisIs;
     case questionsType.TWICE:
