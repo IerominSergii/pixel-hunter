@@ -12,12 +12,14 @@ import setLives from "./set-lives";
 import canContinue from "./can-continue";
 import statsScreen from "../pages/stats";
 import isAnswerCorrect from "./is-answer-correct";
-import getFinish from "./get-finish";
+// import toggleGameState from "./toggle-game-state";
 import greetingElement from "../pages/greeting";
 import setUserName from "./set-user-name";
 import resetState from "./reset-state";
-import setTimerTime from "./set-timer-time";
+// import setTimerTime from "./set-timer-time";
 import resetTimerTime from "./reset-timer-time";
+import deactivateGameState from "./deactivate-game-state";
+import activateGameState from "./activate-game-state";
 
 const INITIAL_STATE = getInitialState();
 
@@ -25,8 +27,14 @@ const startGame = () => {
   let state = Object.assign({}, INITIAL_STATE);
 
   const resetGameHandler = () => {
-    gameContainerElement.replaceChild(questionElement, statsElement);
+    if (state.isGameActive) {
+      const resultTitle = gameContainerElement.querySelector(`.result__title`);
+      if (resultTitle) {
+        gameContainerElement.replaceChild(questionElement, statsElement);
+      }
+    }
 
+    state = deactivateGameState(state);
     state = resetState(state);
     updateHeader(state);
     changeScreen(greetingElement(playGame, headerElement));
@@ -74,7 +82,7 @@ const startGame = () => {
 
   const changeQuestion = (isCurrentAnswerCorrect = false) => {
     state = resetTimerTime(state);
-    const timer = startTimer();
+    // const timer = startTimer();
     const answerType = defineAnswer(isCurrentAnswerCorrect, state.timer);
     state = setAnswer(state, answerType);
 
@@ -90,25 +98,25 @@ const startGame = () => {
       const questionType = state.questions[state.currentQuestion].type;
       defineHandler(questionType, questionElement, userEventHandler);
     } else {
-      clearInterval(timer);
-      state = getFinish(state);
+      // clearInterval(timer);
+      state = deactivateGameState(state);
       endGame(state);
     }
   };
 
-  const startTimer = () => {
-    const timerId = setInterval(() => {
-      if (state.timer > 0) {
-        state = setTimerTime(state, state.timer - 1);
-        updateHeader(state);
-      } else {
-        clearInterval(timerId);
-        changeQuestion();
-      }
-    }, 1000);
+  // const startTimer = () => {
+  //   const timerId = setInterval(() => {
+  //     if (state.timer > 0) {
+  //       state = setTimerTime(state, state.timer - 1);
+  //       updateHeader(state);
+  //     } else {
+  //       clearInterval(timerId);
+  //       changeQuestion();
+  //     }
+  //   }, 1000);
 
-    return timerId;
-  };
+  //   return timerId;
+  // };
 
   const userEventHandler = (evt) => {
     const isCurrentAnswerCorrect = isAnswerCorrect(state.currentQuestion, evt);
@@ -119,6 +127,12 @@ const startGame = () => {
   };
 
   const playGame = () => {
+    state = activateGameState(state);
+
+    const resultTitle = gameContainerElement.querySelector(`.result__title`);
+    if (resultTitle) {
+      gameContainerElement.replaceChild(questionElement, statsElement);
+    }
     const name = document.querySelector(`.rules__input`);
     state = setUserName(state, name.value);
     gameContainerElement.prepend(headerElement);
@@ -131,7 +145,7 @@ const startGame = () => {
 
     changeScreen(gameContainerElement);
 
-    startTimer();
+    // startTimer();
   };
 
   showGreeting();

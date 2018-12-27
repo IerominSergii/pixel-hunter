@@ -2,7 +2,7 @@ export const getInitialState = () => {
   return Object.freeze({
     name: ``,
     lives: DEFAULT_LIVES,
-    isGameFinished: false,
+    isGameActive: false,
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,

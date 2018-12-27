@@ -58,11 +58,11 @@ const getLivesTemplate = (lives) => {
 };
 
 export default (state) => {
-  const {isGameFinished} = state;
+  const {isGameActive} = state;
 
   return `<header class="header">
   ${renderGoBackButton()}
-  ${!isGameFinished ? getTimerTemplate(state.timer) : ``}
-  ${!isGameFinished ? getLivesTemplate(state.lives) : ``}
+  ${isGameActive ? getTimerTemplate(state.timer) : ``}
+  ${isGameActive ? getLivesTemplate(state.lives) : ``}
   </header>`;
 };
