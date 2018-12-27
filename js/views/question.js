@@ -1,4 +1,4 @@
-// import {questionsType} from "./../game/configuration";
+import {questionsType} from "./../game/configuration";
 
 import questionSingle from "./../templates/question-single";
 import questionTwice from "./../templates/question-twice";
@@ -7,15 +7,14 @@ import questionTriple from "./../templates/question-triple";
 import currentStats from "./../templates/current-stats";
 // import {createElement} from "../util/util";
 
-const templates = {
-  single: questionSingle,
-  twice: questionTwice,
-  triple: questionTriple
-};
+const templates = new Map([
+  [questionsType.SINGLE, questionSingle],
+  [questionsType.TWICE, questionTwice],
+  [questionsType.TRIPLE, questionTriple]
+]);
 
 const getQuestionTemplate = (question) => {
-  const template = templates[question.type](question);
-  return template;
+  return templates.get(question.type)(question);
 };
 
 // const bindHandler = (type, element, callback, timerId) => {
