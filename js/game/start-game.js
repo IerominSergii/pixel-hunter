@@ -1,5 +1,5 @@
-import {getInitialState, ANSWERS_TYPES, questionsType} from "./configuration";
-import {changeScreen, createElement} from "../util/util";
+import {getInitialState, ANSWERS_TYPES} from "./configuration";
+import {changeScreen, createElement, clearChildren} from "../util/util";
 import questionView from "../views/question";
 import {questions} from "../data/data";
 import headerTemplate from "./../views/header";
@@ -39,20 +39,6 @@ const startGame = () => {
     changeScreen(greetingElement(playGame, headerElement));
   };
 
-  const defineHandler = (type, element, callback, timerId) => {
-    const handler = (evt) => {
-      clearInterval(timerId);
-      callback(evt);
-    };
-
-    const gameOption = element.querySelector(`.game__content`);
-    if (type === questionsType.TRIPLE) {
-      gameOption.addEventListener(`click`, handler);
-    } else {
-      gameOption.addEventListener(`change`, handler);
-    }
-  };
-
   const gameContainerElement = createElement();
   const headerElement = createElement();
   const questionElement = createElement();
@@ -74,14 +60,24 @@ const startGame = () => {
     headerElement.addEventListener(`click`, resetGameHandler);
   };
 
-  const updateGameContent = (gameState) => {
-    questionElement.innerHTML = questionView(gameState);
+  const updateGameContent = (gameState, handler, timer) => {
+    clearChildren(questionElement);
+    questionElement.appendChild(questionView(gameState, handler, timer));
   };
 
   const endGame = (gameState) => {
     updateHeader(gameState);
     statsElement.innerHTML = statsScreen(gameState);
     gameContainerElement.replaceChild(statsElement, questionElement);
+  };
+
+  const userEventHandler = (evt) => {
+    const isCurrentAnswerCorrect = isAnswerCorrect(state.currentQuestion, evt);
+
+    if (isCurrentAnswerCorrect !== `answerWasNotTaken`) {
+      state = resetTimerTime(state);
+      changeQuestion(isCurrentAnswerCorrect);
+    }
   };
 
   const changeQuestion = (isCurrentAnswerCorrect = false) => {
@@ -98,9 +94,7 @@ const startGame = () => {
       state = setCurrentQuestion(state, state.currentQuestion + 1);
 
       updateHeader(state);
-      updateGameContent(state);
-      const questionType = state.questions[state.currentQuestion].type;
-      defineHandler(questionType, questionElement, userEventHandler, timer);
+      updateGameContent(state, userEventHandler, timer);
     } else {
       clearInterval(timer);
       state = deactivateGameState(state);
@@ -122,15 +116,6 @@ const startGame = () => {
     return timerId;
   };
 
-  const userEventHandler = (evt) => {
-    const isCurrentAnswerCorrect = isAnswerCorrect(state.currentQuestion, evt);
-
-    if (isCurrentAnswerCorrect !== `answerWasNotTaken`) {
-      state = resetTimerTime(state);
-      changeQuestion(isCurrentAnswerCorrect);
-    }
-  };
-
   const playGame = () => {
     state = activateGameState(state);
 
@@ -142,13 +127,9 @@ const startGame = () => {
     state = setUserName(state, name.value);
     gameContainerElement.prepend(headerElement);
 
-    updateHeader(state);
-    updateGameContent(state);
-
-    const questionType = state.questions[state.currentQuestion].type;
     const timerId = startTimer();
-    defineHandler(questionType, questionElement, userEventHandler, timerId);
-
+    updateHeader(state);
+    updateGameContent(state, userEventHandler, timerId);
     changeScreen(gameContainerElement);
   };
 

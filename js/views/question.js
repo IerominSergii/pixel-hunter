@@ -5,7 +5,7 @@ import questionTwice from "./../templates/question-twice";
 import questionTriple from "./../templates/question-triple";
 
 import currentStats from "./../templates/current-stats";
-// import {createElement} from "../util/util";
+import {createElement} from "../util/util";
 
 const templates = new Map([
   [questionsType.SINGLE, questionSingle],
@@ -13,40 +13,36 @@ const templates = new Map([
   [questionsType.TRIPLE, questionTriple]
 ]);
 
+const eventNames = new Map([
+  [questionsType.SINGLE, `change`],
+  [questionsType.TWICE, `change`],
+  [questionsType.TRIPLE, `click`]
+]);
+
 const getQuestionTemplate = (question) => {
   return templates.get(question.type)(question);
 };
 
-// const bindHandler = (type, element, callback, timerId) => {
-//   const handler = (evt) => {
-//     clearInterval(timerId);
-//     callback(evt);
-//   };
-
-//   const gameOption = element.querySelector(`.game__content`);
-//   if (type === questionsType.TRIPLE) {
-//     gameOption.addEventListener(`click`, handler);
-//   } else {
-//     gameOption.addEventListener(`change`, handler);
-//   }
-// };
-
-const questionView = (state) => {
+const questionView = (state, callback, timerId) => {
   const currentQuestion = state.questions[state.currentQuestion];
+  const eventName = eventNames.get(currentQuestion.type);
 
-  //   const questionTemplate = `<section class="game">
-  //   ${getQuestionTemplate(currentQuestion)}
-  //   ${currentStats(state.answers, state.questions.length)}
-  // </section>`;
+  const questionTemplate = `<section class="game">
+    ${getQuestionTemplate(currentQuestion)}
+    ${currentStats(state.answers, state.questions.length)}
+  </section>`;
 
-  // const questionElement = createElement(questionTemplate);
-  // bindHandler();
+  const handler = (evt) => {
+    clearInterval(timerId);
+    callback(evt);
+  };
 
-  // return questionElement;
-  return `<section class="game">
-  ${getQuestionTemplate(currentQuestion)}
-  ${currentStats(state.answers, state.questions.length)}
-</section>`;
+  const questionElement = createElement(questionTemplate);
+  questionElement
+    .querySelector(`.game__content`)
+    .addEventListener(eventName, handler);
+
+  return questionElement;
 };
 
 export default questionView;
