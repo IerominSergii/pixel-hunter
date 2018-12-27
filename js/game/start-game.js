@@ -12,11 +12,10 @@ import setLives from "./set-lives";
 import canContinue from "./can-continue";
 import statsScreen from "../pages/stats";
 import isAnswerCorrect from "./is-answer-correct";
-// import toggleGameState from "./toggle-game-state";
 import greetingElement from "../pages/greeting";
 import setUserName from "./set-user-name";
 import resetState from "./reset-state";
-// import setTimerTime from "./set-timer-time";
+import setTimerTime from "./set-timer-time";
 import resetTimerTime from "./reset-timer-time";
 import deactivateGameState from "./deactivate-game-state";
 import activateGameState from "./activate-game-state";
@@ -40,7 +39,12 @@ const startGame = () => {
     changeScreen(greetingElement(playGame, headerElement));
   };
 
-  const defineHandler = (type, element, handler) => {
+  const defineHandler = (type, element, callback, timerId) => {
+    const handler = (evt) => {
+      clearInterval(timerId);
+      callback(evt);
+    };
+
     const gameOption = element.querySelector(`.game__content`);
     if (type === questionsType.TRIPLE) {
       gameOption.addEventListener(`click`, handler);
@@ -82,7 +86,7 @@ const startGame = () => {
 
   const changeQuestion = (isCurrentAnswerCorrect = false) => {
     state = resetTimerTime(state);
-    // const timer = startTimer();
+    const timer = startTimer();
     const answerType = defineAnswer(isCurrentAnswerCorrect, state.timer);
     state = setAnswer(state, answerType);
 
@@ -96,32 +100,33 @@ const startGame = () => {
       updateHeader(state);
       updateGameContent(state);
       const questionType = state.questions[state.currentQuestion].type;
-      defineHandler(questionType, questionElement, userEventHandler);
+      defineHandler(questionType, questionElement, userEventHandler, timer);
     } else {
-      // clearInterval(timer);
+      clearInterval(timer);
       state = deactivateGameState(state);
       endGame(state);
     }
   };
 
-  // const startTimer = () => {
-  //   const timerId = setInterval(() => {
-  //     if (state.timer > 0) {
-  //       state = setTimerTime(state, state.timer - 1);
-  //       updateHeader(state);
-  //     } else {
-  //       clearInterval(timerId);
-  //       changeQuestion();
-  //     }
-  //   }, 1000);
+  const startTimer = () => {
+    const timerId = setInterval(() => {
+      if (state.timer > 0) {
+        state = setTimerTime(state, state.timer - 1);
+        updateHeader(state);
+      } else {
+        clearInterval(timerId);
+        changeQuestion();
+      }
+    }, 1000);
 
-  //   return timerId;
-  // };
+    return timerId;
+  };
 
   const userEventHandler = (evt) => {
     const isCurrentAnswerCorrect = isAnswerCorrect(state.currentQuestion, evt);
 
     if (isCurrentAnswerCorrect !== `answerWasNotTaken`) {
+      state = resetTimerTime(state);
       changeQuestion(isCurrentAnswerCorrect);
     }
   };
@@ -141,11 +146,10 @@ const startGame = () => {
     updateGameContent(state);
 
     const questionType = state.questions[state.currentQuestion].type;
-    defineHandler(questionType, questionElement, userEventHandler);
+    const timerId = startTimer();
+    defineHandler(questionType, questionElement, userEventHandler, timerId);
 
     changeScreen(gameContainerElement);
-
-    // startTimer();
   };
 
   showGreeting();

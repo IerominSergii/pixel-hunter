@@ -36,4 +36,4 @@ export const questionsType = {
 
 export const SAVED_LIFE_VALUE = 50;
 export const DEFAULT_LIVES = 3;
-export const DEFAULT_TIMER = 7;
+export const DEFAULT_TIMER = 30;
