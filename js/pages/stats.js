@@ -2,10 +2,11 @@ import countPoints from "../game/count-points";
 import {
   ANSWERS_TYPES,
   ANSWER_POINTS,
-  SAVED_LIFE_VALUE,
-  FAST_BONUS,
-  SLOW_BONUS
+  SAVED_LIFE_VALUE
 } from "../game/configuration";
+
+const FAST_BONUS = 50;
+const SLOW_BONUS = 50;
 
 const getTotalResults = (answers) => {
   const correctAnswers = answers.filter((answer) => {

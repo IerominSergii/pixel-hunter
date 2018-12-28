@@ -17,9 +17,6 @@ export const ANSWER_POINTS = {
   wrong: 0
 };
 
-export const FAST_BONUS = 50;
-export const SLOW_BONUS = 50;
-
 export const ANSWERS_TYPES = {
   CORRECT: `correct`,
   FAST: `fast`,

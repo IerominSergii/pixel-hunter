@@ -11,7 +11,6 @@ import setQuestions from "./set-questions";
 import setLives from "./set-lives";
 import canContinue from "./can-continue";
 import statsScreen from "../pages/stats";
-import isAnswerCorrect from "./is-answer-correct";
 import greetingElement from "../pages/greeting";
 import setUserName from "./set-user-name";
 import resetState from "./reset-state";
@@ -71,13 +70,9 @@ const startGame = () => {
     gameContainerElement.replaceChild(statsElement, questionElement);
   };
 
-  const userEventHandler = (evt) => {
-    const isCurrentAnswerCorrect = isAnswerCorrect(state.currentQuestion, evt);
-
-    if (isCurrentAnswerCorrect !== `answerWasNotTaken`) {
-      state = resetTimerTime(state);
-      changeQuestion(isCurrentAnswerCorrect);
-    }
+  const userEventHandler = (isAnswerCorrect) => {
+    state = resetTimerTime(state);
+    changeQuestion(isAnswerCorrect);
   };
 
   const changeQuestion = (isCurrentAnswerCorrect = false) => {

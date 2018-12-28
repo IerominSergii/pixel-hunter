@@ -1,36 +1,23 @@
 import {questionsType} from "./configuration";
-import {questions} from "../data/data";
 
-const isAnswerCorrect = (currentQuestion, evt) => {
-  const question = questions[currentQuestion];
-  const type = question.type;
-  const options = question.options;
+const isAnswerCorrect = (question, userAnswer) => {
+  const {type, options} = question;
 
   switch (type) {
     case questionsType.SINGLE:
-      const checkedInput = document.querySelector(`input:checked`).value;
-
-      return checkedInput === options[0].thisIs;
+      const singleOptionIndex = 0;
+      return userAnswer === options[singleOptionIndex].thisIs;
     case questionsType.TWICE:
-      const checkedInputs = document.querySelectorAll(`input:checked`);
-      const userAnswers = Array.from(checkedInputs).map((input) => {
-        return input.value;
-      });
+      if (userAnswer.values.length === userAnswer.totalQuestionsLength) {
+        const initialResult = false;
 
-      if (checkedInputs.length === 2) {
-        if (
-          userAnswers[0] === options[0].thisIs &&
-          userAnswers[1] === options[1].thisIs
-        ) {
-          return true;
-        } else {
-          return false;
-        }
+        return userAnswer.values.reduce((result, answer, index) => {
+          return result && answer === options[index];
+        }, initialResult);
       } else {
         return `answerWasNotTaken`;
       }
     case questionsType.TRIPLE:
-      const userAnswer = evt.target.getAttribute(`data-answer`);
       return userAnswer === `paint`;
     default: {
       throw new Error(`Wrong question type`);
