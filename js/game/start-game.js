@@ -14,8 +14,6 @@ import statsScreen from "../pages/stats";
 import greetingElement from "../pages/greeting";
 import setUserName from "./set-user-name";
 import resetState from "./reset-state";
-import setTimerTime from "./set-timer-time";
-import resetTimerTime from "./reset-timer-time";
 import deactivateGameState from "./deactivate-game-state";
 import activateGameState from "./activate-game-state";
 
@@ -59,9 +57,9 @@ const startGame = () => {
     headerElement.addEventListener(`click`, resetGameHandler);
   };
 
-  const updateGameContent = (gameState, handler, timer) => {
+  const updateGameContent = (gameState, handler) => {
     clearChildren(questionElement);
-    questionElement.appendChild(questionView(gameState, handler, timer));
+    questionElement.appendChild(questionView(gameState, handler));
   };
 
   const endGame = (gameState) => {
@@ -71,13 +69,10 @@ const startGame = () => {
   };
 
   const userEventHandler = (isAnswerCorrect) => {
-    state = resetTimerTime(state);
     changeQuestion(isAnswerCorrect);
   };
 
   const changeQuestion = (isCurrentAnswerCorrect = false) => {
-    state = resetTimerTime(state);
-    const timer = startTimer();
     const answerType = defineAnswer(isCurrentAnswerCorrect, state.timer);
     state = setAnswer(state, answerType);
 
@@ -89,26 +84,11 @@ const startGame = () => {
       state = setCurrentQuestion(state, state.currentQuestion + 1);
 
       updateHeader(state);
-      updateGameContent(state, userEventHandler, timer);
+      updateGameContent(state, userEventHandler);
     } else {
-      clearInterval(timer);
       state = deactivateGameState(state);
       endGame(state);
     }
-  };
-
-  const startTimer = () => {
-    const timerId = setInterval(() => {
-      if (state.timer > 0) {
-        state = setTimerTime(state, state.timer - 1);
-        updateHeader(state);
-      } else {
-        clearInterval(timerId);
-        changeQuestion();
-      }
-    }, 1000);
-
-    return timerId;
   };
 
   const playGame = () => {
@@ -122,9 +102,8 @@ const startGame = () => {
     state = setUserName(state, name.value);
     gameContainerElement.prepend(headerElement);
 
-    const timerId = startTimer();
     updateHeader(state);
-    updateGameContent(state, userEventHandler, timerId);
+    updateGameContent(state, userEventHandler);
     changeScreen(gameContainerElement);
   };
 

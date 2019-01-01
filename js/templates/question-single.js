@@ -1,7 +1,11 @@
-export default (question) => {
-  const option = question.options[0];
+import {createElement} from "../util/util";
 
-  return `<p class="game__task">Угадай, фото или рисунок?</p>
+export default (options, callback) => {
+  const singleOptionIndex = 0;
+  const questionOption = options[singleOptionIndex];
+
+  const getTemplate = (option) => {
+    return `<p class="game__task">Угадай, фото или рисунок?</p>
   <form class="game__content  game__content--wide">
     <div class="game__option">
       <img
@@ -30,4 +34,18 @@ export default (question) => {
       </label>
     </div>
   </form>`;
+  };
+
+  const handler = () => {
+    const userAnswer = document.querySelector(`input:checked`).value;
+    callback(userAnswer === options[singleOptionIndex].thisIs);
+  };
+
+  const questionTemplate = getTemplate(questionOption);
+  const questionElement = createElement(questionTemplate);
+  questionElement
+    .querySelector(`.game__content`)
+    .addEventListener(`change`, handler);
+
+  return questionElement;
 };

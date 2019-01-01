@@ -1,7 +1,7 @@
 import {DEFAULT_LIVES} from "../game/configuration";
 
 const renderGoBackButton = () => {
-  const backButton = `<button class="back">
+  return `<button class="back">
   <span class="visually-hidden">Вернуться к началу</span>
   <svg
     class="icon"
@@ -22,7 +22,6 @@ const renderGoBackButton = () => {
     <use xlink:href="img/sprite.svg#logo-small"></use>
   </svg>
 </button>`;
-  return backButton;
 };
 
 const getTimerTemplate = (time) => {

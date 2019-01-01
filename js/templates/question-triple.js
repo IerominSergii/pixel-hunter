@@ -1,18 +1,33 @@
-const renderOption = (option, index) => {
-  return `<div class="game__option">
-  <img
-    src="${option.src}"
-    alt="Option ${index + 1}"
-    data-answer="${option.thisIs}"
-    width="304"
-    height="455"
-  />
-</div>`;
-};
+import {createElement} from "../util/util";
 
-export default (question) => {
-  return `<p class="game__task">Найдите рисунок среди изображений</p>
-  <form class="game__content  game__content--triple">
-  ${question.options.map(renderOption).join(``)}  
-</form>`;
+export default (options, callback) => {
+  const getOptionTemplate = (option, index) => {
+    return `<div class="game__option">
+    <img
+      src="${option.src}"
+      alt="Option ${index + 1}"
+      data-answer="${option.thisIs}"
+      width="304"
+      height="455"
+    />
+  </div>`;
+  };
+
+  const getQuestionTemplate = (questionOptions) => {
+    return `<p class="game__task">Найдите рисунок среди изображений</p>
+    <form class="game__content  game__content--triple">
+    ${questionOptions.map(getOptionTemplate).join(``)}  
+  </form>`;
+  };
+
+  const handler = (evt) => {
+    callback(evt.target.getAttribute(`data-answer`) === `paint`);
+  };
+
+  const questionElement = createElement(getQuestionTemplate(options));
+  questionElement
+    .querySelector(`.game__content`)
+    .addEventListener(`click`, handler);
+
+  return questionElement;
 };
