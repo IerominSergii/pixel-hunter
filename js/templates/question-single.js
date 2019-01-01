@@ -41,8 +41,7 @@ export default (options, callback) => {
     callback(userAnswer === options[singleOptionIndex].thisIs);
   };
 
-  const questionTemplate = getTemplate(questionOption);
-  const questionElement = createElement(questionTemplate);
+  const questionElement = createElement(getTemplate(questionOption));
   questionElement
     .querySelector(`.game__content`)
     .addEventListener(`change`, handler);
