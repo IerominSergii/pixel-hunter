@@ -1,5 +1,3 @@
-const getCurrentQuestion = (state) => {
+export default (state) => {
   return state.questions[state.currentQuestion];
 };
-
-export default getCurrentQuestion;

@@ -1,6 +1,6 @@
 import {getInitialState} from "./configuration";
 
-const resetState = (state) => {
+export default (state) => {
   const {questions} = state;
   const initialState = getInitialState();
   const newQuestions = Object.freeze(questions);
@@ -9,5 +9,3 @@ const resetState = (state) => {
       Object.assign({}, initialState, {questions: newQuestions})
   );
 };
-
-export default resetState;

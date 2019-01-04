@@ -1,5 +1,3 @@
-const isLose = (lives) => {
+export default (lives) => {
   return lives < 0;
 };
-
-export default isLose;

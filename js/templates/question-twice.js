@@ -1,7 +1,5 @@
 import {createElement} from "../util/util";
 
-const TOTAL_QUESTIONS_AMOUNT = 2;
-
 export default (options, callback) => {
   const getOptionTemplate = (option, index) => {
     return `<div class="game__option">
@@ -42,19 +40,19 @@ export default (options, callback) => {
   };
 
   const handler = () => {
-    let isCorrect = false;
-    const checkedInputs = document.querySelectorAll(`input:checked`);
-    const answerValues = Array.from(checkedInputs).map((input) => {
+    const answerValues = Array.from(
+        document.querySelectorAll(`input:checked`)
+    ).map((input) => {
       return input.value;
     });
 
-    if (answerValues.length === TOTAL_QUESTIONS_AMOUNT) {
-      const initialResult = false;
+    if (answerValues.length === options.length) {
+      let initialResult = false;
+      answerValues.forEach((answer, index) => {
+        initialResult = initialResult && answer === options[index];
+      });
 
-      isCorrect = answerValues.reduce((result, answer, index) => {
-        return result && answer === options[index];
-      }, initialResult);
-      callback(isCorrect);
+      callback(initialResult);
     }
   };
 

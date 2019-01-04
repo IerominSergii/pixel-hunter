@@ -1,4 +1,4 @@
-const setTimerTime = (state, timeValue) => {
+export default (state, timeValue) => {
   if (typeof timeValue !== `number`) {
     throw new Error(`Time type should be number`);
   }
@@ -7,8 +7,5 @@ const setTimerTime = (state, timeValue) => {
     throw new Error(`Time shouldn't be negative`);
   }
 
-  const newState = Object.assign({}, state, {timer: timeValue});
-  return Object.freeze(newState);
+  return Object.freeze(Object.assign({}, state, {timer: timeValue}));
 };
-
-export default setTimerTime;

@@ -17,10 +17,10 @@ import resetState from "./reset-state";
 import deactivateGameState from "./deactivate-game-state";
 import activateGameState from "./activate-game-state";
 
-const INITIAL_STATE = getInitialState();
+const initialState = getInitialState();
 
 const startGame = () => {
-  let state = Object.assign({}, INITIAL_STATE);
+  let state = Object.assign({}, initialState);
 
   const resetGameHandler = () => {
     if (state.isGameActive) {

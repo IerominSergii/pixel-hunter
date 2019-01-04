@@ -1,4 +1,4 @@
-const setCurrentQuestion = (state, currentQuestion) => {
+export default (state, currentQuestion) => {
   if (typeof currentQuestion !== `number`) {
     throw new Error(`currentQuestion type should be number`);
   }
@@ -9,5 +9,3 @@ const setCurrentQuestion = (state, currentQuestion) => {
 
   return Object.freeze(Object.assign({}, state, {currentQuestion}));
 };
-
-export default setCurrentQuestion;

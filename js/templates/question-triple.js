@@ -6,7 +6,7 @@ export default (options, callback) => {
     <img
       src="${option.src}"
       alt="Option ${index + 1}"
-      data-answer="${option.thisIs}"
+      data-answer="${index}"
       width="304"
       height="455"
     />
@@ -21,7 +21,8 @@ export default (options, callback) => {
   };
 
   const handler = (evt) => {
-    callback(evt.target.getAttribute(`data-answer`) === `paint`);
+    const index = evt.target.getAttribute(`data-answer`);
+    callback(options[index].thisIs === `paint`);
   };
 
   const questionElement = createElement(getQuestionTemplate(options));

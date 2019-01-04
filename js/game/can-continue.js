@@ -1,5 +1,3 @@
-const canContinue = (state) => {
+export default (state) => {
   return state.lives >= 0;
 };
-
-export default canContinue;

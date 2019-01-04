@@ -1,7 +1,5 @@
-const goNextQuestion = (state) => {
+export default (state) => {
   return Object.freeze(
       Object.assign({}, state, {currentQuestion: state.currentQuestion + 1})
   );
 };
-
-export default goNextQuestion;
