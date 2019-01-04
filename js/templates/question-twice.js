@@ -39,7 +39,7 @@ export default (options, callback) => {
   </form>`;
   };
 
-  const handler = () => {
+  const gameContentChangeHandler = () => {
     const answerValues = Array.from(
         document.querySelectorAll(`input:checked`)
     ).map((input) => {
@@ -58,7 +58,7 @@ export default (options, callback) => {
   const questionElement = createElement(getQuestionTemplate(options));
   questionElement
     .querySelector(`.game__content`)
-    .addEventListener(`change`, handler);
+    .addEventListener(`change`, gameContentChangeHandler);
 
   return questionElement;
 };

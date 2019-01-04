@@ -20,7 +20,7 @@ export default (options, callback) => {
   </form>`;
   };
 
-  const handler = (evt) => {
+  const gameContentClickHandler = (evt) => {
     const index = evt.target.getAttribute(`data-answer`);
     callback(options[index].thisIs === `paint`);
   };
@@ -28,7 +28,7 @@ export default (options, callback) => {
   const questionElement = createElement(getQuestionTemplate(options));
   questionElement
     .querySelector(`.game__content`)
-    .addEventListener(`click`, handler);
+    .addEventListener(`click`, gameContentClickHandler);
 
   return questionElement;
 };

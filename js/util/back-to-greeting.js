@@ -1,7 +1,7 @@
 import greetingScreen from "../pages/greeting";
 import {changeScreen} from "./util";
 
-const addEventListenerToBackArrow = (element) => {
+export default (element) => {
   const backButtonClickHandler = () => {
     changeScreen(greetingScreen);
   };
@@ -10,5 +10,3 @@ const addEventListenerToBackArrow = (element) => {
     .querySelector(`.back`)
     .addEventListener(`click`, backButtonClickHandler);
 };
-
-export default addEventListenerToBackArrow;

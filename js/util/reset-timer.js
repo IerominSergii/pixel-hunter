@@ -1,7 +1,5 @@
 import {DEFAULT_TIMER} from "../game/configuration";
 
-const resetTimer = (state) => {
+export default (state) => {
   return Object.freeze(Object.assign({}, state, {timer: DEFAULT_TIMER}));
 };
-
-export default resetTimer;

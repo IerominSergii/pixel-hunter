@@ -1,8 +1,9 @@
 import {createElement} from "../util/util";
 
+const SINGLE_OPTION_INDEX = 0;
+
 export default (options, callback) => {
-  const singleOptionIndex = 0;
-  const questionOption = options[singleOptionIndex];
+  const questionOption = options[SINGLE_OPTION_INDEX];
 
   const getTemplate = (option) => {
     return `<p class="game__task">Угадай, фото или рисунок?</p>
@@ -36,15 +37,15 @@ export default (options, callback) => {
   </form>`;
   };
 
-  const handler = () => {
+  const gameContentChangeHandler = () => {
     const userAnswer = document.querySelector(`input:checked`).value;
-    callback(userAnswer === options[singleOptionIndex].thisIs);
+    callback(userAnswer === options[SINGLE_OPTION_INDEX].thisIs);
   };
 
   const questionElement = createElement(getTemplate(questionOption));
   questionElement
     .querySelector(`.game__content`)
-    .addEventListener(`change`, handler);
+    .addEventListener(`change`, gameContentChangeHandler);
 
   return questionElement;
 };

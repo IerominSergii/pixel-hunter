@@ -35,7 +35,7 @@ const rulesTemplate = `<section class="rules">
 </form>
 </section>`;
 
-const rulesElement = (callback, headerElement) => {
+export default (callback, headerElement) => {
   const rulesScreen = createElement(rulesTemplate);
 
   const rulesForm = rulesScreen.querySelector(`.rules__form`);
@@ -62,5 +62,3 @@ const rulesElement = (callback, headerElement) => {
 
   return rulesScreen;
 };
-
-export default rulesElement;

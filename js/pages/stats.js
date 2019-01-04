@@ -85,11 +85,7 @@ export default (state) => {
       <td class="result__total">-${getSlowBonus(slowAnswers.length)}</td>
     </tr>`;
 
-    if (totalResultFinal !== -1) {
-      return detailsTemplate;
-    } else {
-      return ``;
-    }
+    return totalResultFinal !== -1 ? detailsTemplate : ``;
   };
 
   const getPlayerTemplate = () => {
