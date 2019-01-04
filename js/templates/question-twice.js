@@ -47,9 +47,8 @@ export default (options, callback) => {
     });
 
     if (answerValues.length === options.length) {
-      let initialResult = false;
-      answerValues.forEach((answer, index) => {
-        initialResult = initialResult && answer === options[index];
+      const initialResult = answerValues.every((answer, index) => {
+        return answer === options[index].thisIs;
       });
 
       callback(initialResult);
