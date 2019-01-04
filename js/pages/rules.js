@@ -1,31 +1,6 @@
-import {createElement, changeScreen} from "./../util/util";
-import addEventListenerToBackArrow from "./../util/backToGreeting";
-import game1Screen from "./game1";
+import {createElement} from "./../util/util";
 
-const rulesTemplate = `<header class="header">
-<button class="back">
-  <span class="visually-hidden">Вернуться к началу</span>
-  <svg
-    class="icon"
-    width="45"
-    height="45"
-    viewBox="0 0 45 45"
-    fill="#000000"
-  >
-    <use xlink:href="img/sprite.svg#arrow-left"></use>
-  </svg>
-  <svg
-    class="icon"
-    width="101"
-    height="44"
-    viewBox="0 0 101 44"
-    fill="#000000"
-  >
-    <use xlink:href="img/sprite.svg#logo-small"></use>
-  </svg>
-</button>
-</header>
-<section class="rules">
+const rulesTemplate = `<section class="rules">
 <h2 class="rules__title">Правила</h2>
 <ul class="rules__description">
   <li>
@@ -53,34 +28,37 @@ const rulesTemplate = `<header class="header">
 </ul>
 <p class="rules__ready">Готовы?</p>
 <form class="rules__form">
-  <input class="rules__input" type="text" placeholder="Ваше Имя" />
+  <input class="rules__input" type="text" placeholder="Ваше Имя" autofocus />
   <button class="rules__button continue" type="submit" disabled>
     Go!
   </button>
 </form>
 </section>`;
 
-const rulesScreen = createElement(rulesTemplate);
+export default (callback, headerElement) => {
+  const rulesScreen = createElement(rulesTemplate);
 
-const rulesForm = rulesScreen.querySelector(`.rules__form`);
-const rulesInput = rulesForm.querySelector(`.rules__input`);
-const rulesButton = rulesForm.querySelector(`.rules__button`);
+  const rulesForm = rulesScreen.querySelector(`.rules__form`);
+  const rulesInput = rulesForm.querySelector(`.rules__input`);
+  const rulesButton = rulesForm.querySelector(`.rules__button`);
 
-const rulesInputInputHandler = () => {
-  if (rulesInput.value) {
-    rulesButton.removeAttribute(`disabled`);
-  } else {
-    rulesButton.setAttribute(`disabled`, `disabled`);
-  }
+  const rulesInputInputHandler = () => {
+    if (rulesInput.value) {
+      rulesButton.removeAttribute(`disabled`);
+    } else {
+      rulesButton.setAttribute(`disabled`, `disabled`);
+    }
+  };
+
+  const submitFormHandler = () => {
+    callback();
+  };
+
+  rulesInput.addEventListener(`input`, rulesInputInputHandler);
+  rulesForm.addEventListener(`submit`, submitFormHandler);
+  rulesInput.focus();
+
+  rulesScreen.prepend(headerElement);
+
+  return rulesScreen;
 };
-
-const rulesFormSubmitHandler = () => {
-  changeScreen(game1Screen);
-};
-
-rulesInput.addEventListener(`input`, rulesInputInputHandler);
-rulesForm.addEventListener(`submit`, rulesFormSubmitHandler);
-
-addEventListenerToBackArrow(rulesScreen);
-
-export default rulesScreen;

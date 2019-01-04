@@ -15,7 +15,7 @@ const returnResult = (answers, lives) => {
   return answersResult + lives * SAVED_LIFE_VALUE;
 };
 
-const countPoints = (answers, lives, questionsAmount) => {
+export default (answers, lives, questionsAmount) => {
   let finalResult;
 
   if (isLose(lives) || answers.length < questionsAmount) {
@@ -26,5 +26,3 @@ const countPoints = (answers, lives, questionsAmount) => {
 
   return finalResult;
 };
-
-export default countPoints;

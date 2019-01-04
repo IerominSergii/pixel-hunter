@@ -2,10 +2,11 @@ export const getInitialState = () => {
   return Object.freeze({
     name: ``,
     lives: DEFAULT_LIVES,
+    isGameActive: false,
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,
-    timer: 0
+    timer: DEFAULT_TIMER
   });
 };
 
@@ -20,7 +21,14 @@ export const ANSWERS_TYPES = {
   CORRECT: `correct`,
   FAST: `fast`,
   SLOW: `slow`,
-  WRONG: `wrong`
+  WRONG: `wrong`,
+  UNKNOWN: `unknown`
+};
+
+export const questionsType = {
+  SINGLE: `single`,
+  TWICE: `twice`,
+  TRIPLE: `triple`
 };
 
 export const SAVED_LIFE_VALUE = 50;

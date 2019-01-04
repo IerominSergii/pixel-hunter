@@ -1,7 +1,4 @@
-const setQuestions = (state, questions) => {
+export default (state, questions) => {
   const newQuestions = Object.freeze(questions.slice());
-
-  return Object.freeze(Object.assign({}, state, {questions: newQuestions}));
+  return Object.assign({}, state, {questions: newQuestions});
 };
-
-export default setQuestions;

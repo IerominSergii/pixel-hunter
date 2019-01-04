@@ -1,6 +1,6 @@
 import {ANSWER_POINTS} from "./configuration";
 
-const setAnswer = (state, newAnswer) => {
+export default (state, newAnswer) => {
   if (typeof newAnswer !== `string`) {
     throw new Error(`Wrong newAnswer type, should be string.`);
   }
@@ -17,5 +17,3 @@ const setAnswer = (state, newAnswer) => {
   });
   return Object.freeze(newState);
 };
-
-export default setAnswer;
