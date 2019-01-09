@@ -1,4 +1,5 @@
-import introScreen from "./pages/intro";
 import {changeScreen} from "./util/util";
+import IntroView from "./pages/intro-view";
 
-changeScreen(introScreen);
+const intro = new IntroView();
+changeScreen(intro.element);
