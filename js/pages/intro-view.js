@@ -1,16 +1,16 @@
 import AbstractView from "../views/abstract-view";
-import startGame from "../game/start-game";
+import {createElement} from "../util/util";
 
 export default class IntroView extends AbstractView {
   get template() {
-    return `<section class="intro">
-    <button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
-    <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>
-  </section>`;
+    return `<button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
+    <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>`;
   }
 
-  asteriskClickHandler() {
-    startGame();
+  asteriskClickHandler() {}
+
+  render() {
+    return createElement(this.template, `section`, `intro`);
   }
 
   bind(element) {

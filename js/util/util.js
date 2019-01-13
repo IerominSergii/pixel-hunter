@@ -10,7 +10,13 @@ export const createElement = (template = ``, tag = `div`, className = ``) => {
   const newElement = document.createElement(tag);
 
   if (className) {
-    newElement.classList.add(className);
+    if (Array.isArray(className)) {
+      className.forEach((currentClassName) => {
+        newElement.classList.add(currentClassName);
+      });
+    } else {
+      newElement.classList.add(className);
+    }
   }
 
   newElement.innerHTML = template;

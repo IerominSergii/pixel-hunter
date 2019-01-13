@@ -47,6 +47,7 @@ export default class StatsView extends AbstractView {
     this.state = state;
     this.answers = this.state.answers;
     this.lives = this.state.lives;
+    this.questions = this.state.questions;
     this.totalResultFinal = countPoints(
         this.answers,
         this.lives,
@@ -107,7 +108,7 @@ export default class StatsView extends AbstractView {
   }
 
   _getPlayerTemplate() {
-    const {answers} = this.state;
+    const {answers, name} = this.state;
 
     return `<table class="result__table">
     <tr>

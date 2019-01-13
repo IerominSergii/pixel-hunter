@@ -1,13 +1,16 @@
 import AbstractView from "../views/abstract-view";
+import {createElement} from "../util/util";
 
 export default class RulesView extends AbstractView {
   constructor() {
     super();
+    this.onSubmit = (evt) => {
+      this.submitFormHandler(evt);
+    };
   }
 
   get template() {
-    return `<section class="rules">
-    <h2 class="rules__title">Правила</h2>
+    return `<h2 class="rules__title">Правила</h2>
     <ul class="rules__description">
       <li>
         Угадай 10 раз для каждого изображения фото
@@ -38,8 +41,7 @@ export default class RulesView extends AbstractView {
       <button class="rules__button continue" type="submit" disabled>
         Go!
       </button>
-    </form>
-    </section>`;
+    </form>`;
   }
 
   enableRulesButton(input, button) {
@@ -54,16 +56,26 @@ export default class RulesView extends AbstractView {
     input.addEventListener(`input`, rulesInputInputHandler);
   }
 
-  submitFormHandler() {}
+  render() {
+    return createElement(this.template, `section`, `rules`);
+  }
 
-  bind() {
-    const rulesForm = this._element.querySelector(`.rules__form`);
+  submitFormCallback() {}
+
+  submitFormHandler() {
+    const rulesInput = this._element.querySelector(`.rules__input`);
+    rulesInput.value = ``;
+    this.submitFormCallback();
+  }
+
+  bind(element) {
+    const rulesForm = element.querySelector(`.rules__form`);
     const rulesInput = rulesForm.querySelector(`.rules__input`);
     const rulesButton = rulesForm.querySelector(`.rules__button`);
 
     this.enableRulesButton(rulesInput, rulesButton);
 
-    rulesForm.addEventListener(`submit`, this.submitFormHandler);
+    rulesForm.addEventListener(`submit`, this.onSubmit);
     rulesInput.focus();
   }
 }

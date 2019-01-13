@@ -1,13 +1,9 @@
 import AbstractView from "../views/abstract-view";
+import {createElement} from "../util/util";
 
 export default class GreetingView extends AbstractView {
-  constructor() {
-    super();
-  }
-
   get template() {
-    return `<section class="greeting central--blur">
-    <img
+    return `<img
       class="greeting__logo"
       src="img/logo_ph-big.svg"
       width="201"
@@ -42,11 +38,17 @@ export default class GreetingView extends AbstractView {
       >
         <use xlink:href="img/sprite.svg#arrow-right"></use>
       </svg>
-    </button>
-    </section>`;
+    </button>`;
   }
 
   continueClickHandler() {}
+
+  render() {
+    return createElement(this.template, `section`, [
+      `greeting`,
+      `central--blur`
+    ]);
+  }
 
   bind() {
     const greetingContinue = this._element.querySelector(`.greeting__continue`);
