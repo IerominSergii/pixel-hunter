@@ -1,9 +1,10 @@
 import AbstractView from "../views/abstract-view";
 
 export default class QuestionTwice extends AbstractView {
-  constructor(options) {
+  constructor(options, callback) {
     super();
     this.options = options;
+    this.userChoiceHandler = callback;
     this.onChange = () => {
       this.gameContentChangeHandler();
     };
@@ -46,8 +47,6 @@ export default class QuestionTwice extends AbstractView {
     ${this.options.map(this.getOptionTemplate).join(``)}
   </form>`;
   }
-
-  userChoiceHandler() {}
 
   gameContentChangeHandler() {
     const answerValues = Array.from(

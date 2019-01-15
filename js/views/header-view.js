@@ -4,9 +4,10 @@ import BackButton from "../views/back-button-view";
 import {createElement} from "../util/util";
 
 export default class HeaderView extends AbstractView {
-  constructor(state) {
+  constructor(state, callback) {
     super();
     this.state = state;
+    this.onBackButtonClick = callback;
   }
 
   getTimerTemplate() {
@@ -55,8 +56,6 @@ export default class HeaderView extends AbstractView {
   render() {
     return createElement(this.template, `header`, `header`);
   }
-
-  onBackButtonClick() {}
 
   get element() {
     if (this._element) {

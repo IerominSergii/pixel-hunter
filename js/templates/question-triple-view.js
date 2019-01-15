@@ -1,9 +1,10 @@
 import AbstractView from "../views/abstract-view";
 
 export default class QuestionTriple extends AbstractView {
-  constructor(options) {
+  constructor(options, callback) {
     super();
     this.options = options;
+    this.userChoiceHandler = callback;
     this.onClick = (evt) => {
       this.gameContentClickHandler(evt);
     };
@@ -27,8 +28,6 @@ export default class QuestionTriple extends AbstractView {
     ${this.options.map(this.getOptionTemplate).join(``)}  
   </form>`;
   }
-
-  userChoiceHandler() {}
 
   gameContentClickHandler(evt) {
     const index = evt.target.getAttribute(`data-answer`);

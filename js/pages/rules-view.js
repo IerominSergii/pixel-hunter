@@ -2,10 +2,11 @@ import AbstractView from "../views/abstract-view";
 import {createElement} from "../util/util";
 
 export default class RulesView extends AbstractView {
-  constructor() {
+  constructor(callback) {
     super();
+    this.submitFormCallback = callback;
     this.onSubmit = (evt) => {
-      this.submitFormHandler(evt);
+      this._submitFormHandler(evt);
     };
   }
 
@@ -44,13 +45,9 @@ export default class RulesView extends AbstractView {
     </form>`;
   }
 
-  enableRulesButton(input, button) {
+  _enableRulesButton(input, button) {
     const rulesInputInputHandler = () => {
-      if (input.value) {
-        button.removeAttribute(`disabled`);
-      } else {
-        button.setAttribute(`disabled`, `disabled`);
-      }
+      button.disabled = input.value ? false : true;
     };
 
     input.addEventListener(`input`, rulesInputInputHandler);
@@ -60,11 +57,12 @@ export default class RulesView extends AbstractView {
     return createElement(this.template, `section`, `rules`);
   }
 
-  submitFormCallback() {}
-
-  submitFormHandler() {
+  _submitFormHandler() {
     const rulesInput = this._element.querySelector(`.rules__input`);
+    this._element.querySelector(`.rules__button`).disabled = true;
+
     rulesInput.value = ``;
+    rulesInput.focus();
     this.submitFormCallback();
   }
 
@@ -73,7 +71,7 @@ export default class RulesView extends AbstractView {
     const rulesInput = rulesForm.querySelector(`.rules__input`);
     const rulesButton = rulesForm.querySelector(`.rules__button`);
 
-    this.enableRulesButton(rulesInput, rulesButton);
+    this._enableRulesButton(rulesInput, rulesButton);
 
     rulesForm.addEventListener(`submit`, this.onSubmit);
     rulesInput.focus();

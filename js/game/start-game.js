@@ -20,7 +20,14 @@ import StatsView from "../pages/stats-view";
 
 const initialState = getInitialState();
 let state;
-const rules = new RulesView();
+
+const rulesInputHandler = () => {
+  takePlayerName();
+  updateGameContent(state);
+  changeScreen(gameContainerElement);
+};
+
+const rules = new RulesView(rulesInputHandler);
 
 const gameContainerElement = createElement(``, `div`, `gameContainerElement`);
 
@@ -52,7 +59,6 @@ const changeQuestion = (isCurrentAnswerCorrect = false) => {
 
   if (canContinue(state) && hasNextQuestion(state)) {
     state = setCurrentQuestion(state, state.currentQuestion + 1);
-
     updateGameContent(state);
   } else {
     state = deactivateGameState(state);
@@ -64,15 +70,8 @@ const userEventHandler = (isAnswerCorrect) => {
   changeQuestion(isAnswerCorrect);
 };
 
-const rulesInputHandler = () => {
-  takePlayerName();
-  updateGameContent(state);
-  changeScreen(gameContainerElement);
-};
-
 const showGreeting = () => {
-  const greeting = new GreetingView();
-  greeting.continueClickHandler = playGame;
+  const greeting = new GreetingView(playGame);
   changeScreen(greeting.element);
 };
 
@@ -80,29 +79,23 @@ const resetGameHandler = () => {
   clearChildren(gameContainerElement);
   state = deactivateGameState(state);
   state = resetState(state);
-
   updateHeader(state);
   showGreeting();
 };
 
 const updateHeader = (gameState) => {
-  const newHeader = new HeaderView(gameState);
-  newHeader.onBackButtonClick = resetGameHandler;
+  const newHeader = new HeaderView(gameState, resetGameHandler);
   gameContainerElement.prepend(newHeader.element);
 };
 
 const updateQuestion = (gameState) => {
-  const newQuestion = new Question(gameState);
-  newQuestion.userChoiceHandler = userEventHandler;
-
+  const newQuestion = new Question(gameState, userEventHandler);
   gameContainerElement.appendChild(newQuestion.element);
 };
 
 const playGame = () => {
   updateHeader(state);
   state = activateGameState(state);
-  rules.submitFormCallback = rulesInputHandler;
-
   gameContainerElement.appendChild(rules.element);
   changeScreen(gameContainerElement);
 };
@@ -110,7 +103,6 @@ const playGame = () => {
 const initGame = () => {
   state = Object.assign({}, initialState);
   state = setQuestions(state, questions);
-
   showGreeting(state);
 };
 

@@ -2,6 +2,11 @@ import AbstractView from "../views/abstract-view";
 import {createElement} from "../util/util";
 
 export default class GreetingView extends AbstractView {
+  constructor(callback) {
+    super();
+    this.continueClickHandler = callback;
+  }
+
   get template() {
     return `<img
       class="greeting__logo"
@@ -40,8 +45,6 @@ export default class GreetingView extends AbstractView {
       </svg>
     </button>`;
   }
-
-  continueClickHandler() {}
 
   render() {
     return createElement(this.template, `section`, [

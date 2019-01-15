@@ -1,7 +1,7 @@
 import AbstractView from "../views/abstract-view";
 
 export default class QuestionSingle extends AbstractView {
-  constructor(options) {
+  constructor(options, callback) {
     super();
     this.options = options;
     this.SINGLE_OPTION_INDEX = 0;
@@ -10,6 +10,7 @@ export default class QuestionSingle extends AbstractView {
     this.onChange = () => {
       this.gameContentChangeHandler();
     };
+    this.userChoiceHandler = callback;
   }
 
   get template() {
@@ -43,8 +44,6 @@ export default class QuestionSingle extends AbstractView {
     </div>
   </form>`;
   }
-
-  userChoiceHandler() {}
 
   gameContentChangeHandler() {
     const userAnswer = document.querySelector(`input:checked`).value;

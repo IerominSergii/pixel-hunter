@@ -6,7 +6,7 @@ import QuestionTwice from "../templates/question-twice-view";
 import QuestionTriple from "../templates/question-triple-view";
 
 export default class Question extends AbstractView {
-  constructor(state) {
+  constructor(state, callback) {
     super();
     this.state = state;
     this.answers = this.state.answers;
@@ -14,28 +14,30 @@ export default class Question extends AbstractView {
     this.currentQuestion = this.state.questions[this.state.currentQuestion];
     this.type = this.currentQuestion.type;
     this.options = this.currentQuestion.options;
+
+    this.userChoiceHandler = () => callback();
   }
 
-  getQuestionView(answerType) {
+  getQuestionView(answerType, callback) {
     switch (answerType) {
       case `single`:
-        return new QuestionSingle(this.options);
+        return new QuestionSingle(this.options, callback);
       case `twice`:
-        return new QuestionTwice(this.options);
+        return new QuestionTwice(this.options, callback);
       case `triple`:
-        return new QuestionTriple(this.options);
+        return new QuestionTriple(this.options, callback);
       default:
         throw new Error(`Unknown question type`);
     }
   }
 
-  userChoiceHandler() {}
-
   render() {
     const questionElement = createElement(``, `section`, `game`);
     const currentStats = new CurrentStats(this.answers, this.questions.length);
-    const currentQuestionView = this.getQuestionView(this.type);
-    currentQuestionView.userChoiceHandler = this.userChoiceHandler.bind(this);
+    const currentQuestionView = this.getQuestionView(
+        this.type,
+        this.userChoiceHandler
+    );
 
     questionElement.appendChild(currentQuestionView.element);
     questionElement.appendChild(currentStats.element);
