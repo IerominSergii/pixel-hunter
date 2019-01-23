@@ -4,10 +4,8 @@ export default class QuestionTriple extends AbstractView {
   constructor(options, callback) {
     super();
     this.options = options;
-    this.userChoiceHandler = callback;
-    this.onClick = (evt) => {
-      this.gameContentClickHandler(evt);
-    };
+    this.onClick = callback;
+    this.userChoice = (evt) => this.userChoiceHandler(evt);
   }
 
   getOptionTemplate(option, index) {
@@ -29,14 +27,14 @@ export default class QuestionTriple extends AbstractView {
   </form>`;
   }
 
-  gameContentClickHandler(evt) {
+  userChoiceHandler(evt) {
     const index = evt.target.getAttribute(`data-answer`);
-    this.userChoiceHandler(this.options[index].thisIs === `paint`);
+    this.onClick(this.options[index].thisIs === `paint`);
   }
 
   bind(element) {
     element
       .querySelector(`.game__content`)
-      .addEventListener(`click`, this.onClick);
+      .addEventListener(`click`, this.userChoice);
   }
 }

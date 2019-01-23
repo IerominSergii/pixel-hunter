@@ -1,4 +1,4 @@
-import {ANSWERS_TYPES} from "./configuration";
+import {answersTypes} from "./configuration";
 
 export default (isAnswerCorrect, time) => {
   if (typeof isAnswerCorrect !== `boolean`) {
@@ -11,13 +11,13 @@ export default (isAnswerCorrect, time) => {
 
   if (isAnswerCorrect && time >= 0) {
     if (time > 20) {
-      return ANSWERS_TYPES.FAST;
+      return answersTypes.FAST;
     } else if (time < 10) {
-      return ANSWERS_TYPES.SLOW;
+      return answersTypes.SLOW;
     } else {
-      return ANSWERS_TYPES.CORRECT;
+      return answersTypes.CORRECT;
     }
   } else {
-    return ANSWERS_TYPES.WRONG;
+    return answersTypes.WRONG;
   }
 };

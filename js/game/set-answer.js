@@ -1,12 +1,12 @@
-import {ANSWER_POINTS} from "./configuration";
+import {bonuses} from "./configuration";
 
 export default (state, newAnswer) => {
   if (typeof newAnswer !== `string`) {
     throw new Error(`Wrong newAnswer type, should be string.`);
   }
 
-  if (isNaN(ANSWER_POINTS[newAnswer])) {
-    throw new Error(`Unknown answer type, check the 'ANSWER_POINTS' object.`);
+  if (isNaN(bonuses[newAnswer.toUpperCase()])) {
+    throw new Error(`Unknown answer type, check the 'bonuses' object.`);
   }
 
   const newAnswers = state.answers.slice();

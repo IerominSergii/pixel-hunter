@@ -2,6 +2,11 @@ import AbstractView from "./abstract-view";
 import {createElement} from "../util/util";
 
 export default class BackButton extends AbstractView {
+  constructor(callback) {
+    super();
+    this.onButtonClick = callback;
+  }
+
   get template() {
     return `<span class="visually-hidden">Вернуться к началу</span>
     <svg

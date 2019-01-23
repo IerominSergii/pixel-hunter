@@ -1,16 +1,11 @@
 import AbstractView from "../views/abstract-view";
 
 export default class QuestionSingle extends AbstractView {
-  constructor(options, callback) {
+  constructor(option, callback) {
     super();
-    this.options = options;
-    this.SINGLE_OPTION_INDEX = 0;
-    this.questionOption = options[this.SINGLE_OPTION_INDEX];
-    this.gameContentChangeHandler.bind(this);
-    this.onChange = () => {
-      this.gameContentChangeHandler();
-    };
-    this.userChoiceHandler = callback;
+    this.option = option;
+    this.callback = callback;
+    this.onChoice = () => this.userChoiceHandler();
   }
 
   get template() {
@@ -18,8 +13,8 @@ export default class QuestionSingle extends AbstractView {
   <form class="game__content  game__content--wide">
     <div class="game__option">
       <img
-        src="${this.questionOption.src}"
-        alt="${this.questionOption.alt}"
+        src="${this.option.src}"
+        alt="${this.option.alt}"
         width="705"
         height="455"
       />
@@ -45,16 +40,14 @@ export default class QuestionSingle extends AbstractView {
   </form>`;
   }
 
-  gameContentChangeHandler() {
+  userChoiceHandler() {
     const userAnswer = document.querySelector(`input:checked`).value;
-    this.userChoiceHandler(
-        userAnswer === this.options[this.SINGLE_OPTION_INDEX].thisIs
-    );
+    this.callback(userAnswer === this.option.thisIs);
   }
 
   bind(element) {
     element
       .querySelector(`.game__content`)
-      .addEventListener(`change`, this.onChange);
+      .addEventListener(`change`, this.onChoice);
   }
 }

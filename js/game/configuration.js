@@ -10,14 +10,15 @@ export const getInitialState = () => {
   });
 };
 
-export const ANSWER_POINTS = {
-  correct: 100,
-  fast: 150,
-  slow: 50,
-  wrong: 0
+export const bonuses = {
+  CORRECT: 100,
+  FAST: 50,
+  SLOW: 50,
+  WRONG: 0,
+  LIFE: 50
 };
 
-export const ANSWERS_TYPES = {
+export const answersTypes = {
   CORRECT: `correct`,
   FAST: `fast`,
   SLOW: `slow`,
@@ -31,6 +32,6 @@ export const questionsType = {
   TRIPLE: `triple`
 };
 
-export const SAVED_LIFE_VALUE = 50;
+export const ANSWER_VALUE = 100;
 export const DEFAULT_LIVES = 3;
 export const DEFAULT_TIMER = 30;

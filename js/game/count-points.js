@@ -1,28 +1,21 @@
-import {ANSWER_POINTS, SAVED_LIFE_VALUE} from "./configuration";
 import isLose from "./is-lose";
+import getBonuses from "./get-bonuses";
 
-const returnLoseResult = () => {
-  return -1;
-};
+const getTotalResult = (answers, lives) => {
+  const bonusResult = getBonuses(answers, lives);
 
-const returnResult = (answers, lives) => {
-  const initialValue = 0;
-
-  const answersResult = answers.reduce((sum, answer) => {
-    return sum + ANSWER_POINTS[answer];
-  }, initialValue);
-
-  return answersResult + lives * SAVED_LIFE_VALUE;
+  return (
+    bonusResult.correct.value +
+    bonusResult.fast.value -
+    bonusResult.slow.value +
+    bonusResult.life.value
+  );
 };
 
 export default (answers, lives, questionsAmount) => {
-  let finalResult;
-
   if (isLose(lives) || answers.length < questionsAmount) {
-    finalResult = returnLoseResult();
+    return -1;
   } else {
-    finalResult = returnResult(answers, lives);
+    return getTotalResult(answers, lives);
   }
-
-  return finalResult;
 };

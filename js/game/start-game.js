@@ -1,4 +1,4 @@
-import {getInitialState, ANSWERS_TYPES} from "./configuration";
+import {getInitialState, answersTypes, DEFAULT_LIVES} from "./configuration";
 import {changeScreen, createElement, clearChildren} from "../util/util";
 import {questions} from "../data/data";
 import hasNextQuestion from "./has-next-question";
@@ -15,8 +15,10 @@ import activateGameState from "./activate-game-state";
 import HeaderView from "../views/header-view";
 import GreetingView from "../pages/greeting-view";
 import RulesView from "../pages/rules-view";
-import Question from "../views/question-view";
+import question from "./question";
 import StatsView from "../pages/stats-view";
+import countPoints from "./count-points";
+import getBonuses from "./get-bonuses";
 
 const initialState = getInitialState();
 let state;
@@ -43,17 +45,22 @@ const updateGameContent = (gameState) => {
 };
 
 const endGame = (gameState) => {
+  const {name, answers, lives} = gameState;
+  const totalResult = countPoints(answers, lives, questions.length);
+  const bonuses = getBonuses(answers, lives);
+
   clearChildren(gameContainerElement);
   updateHeader(gameState);
-  const statsElement = new StatsView(gameState);
-  gameContainerElement.appendChild(statsElement.element);
+  const statsElement = new StatsView(name, answers, lives, totalResult, bonuses)
+    .element;
+  gameContainerElement.appendChild(statsElement);
 };
 
 const changeQuestion = (isCurrentAnswerCorrect = false) => {
   const answerType = defineAnswer(isCurrentAnswerCorrect, state.timer);
   state = setAnswer(state, answerType);
 
-  if (answerType === ANSWERS_TYPES.WRONG) {
+  if (answerType === answersTypes.WRONG) {
     state = setLives(state, state.lives - 1);
   }
 
@@ -84,13 +91,28 @@ const resetGameHandler = () => {
 };
 
 const updateHeader = (gameState) => {
-  const newHeader = new HeaderView(gameState, resetGameHandler);
+  const newHeader = new HeaderView(
+      gameState.timer,
+      gameState.lives,
+      gameState.isGameActive,
+      DEFAULT_LIVES,
+      resetGameHandler
+  );
   gameContainerElement.prepend(newHeader.element);
 };
 
 const updateQuestion = (gameState) => {
-  const newQuestion = new Question(gameState, userEventHandler);
-  gameContainerElement.appendChild(newQuestion.element);
+  const {answers} = gameState;
+  const {type, options} = questions[gameState.currentQuestion];
+
+  const newQuestion = question(
+      type,
+      options,
+      answers,
+      questions,
+      userEventHandler
+  );
+  gameContainerElement.appendChild(newQuestion);
 };
 
 const playGame = () => {

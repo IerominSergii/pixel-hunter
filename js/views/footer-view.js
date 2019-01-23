@@ -1,4 +1,5 @@
 import AbstractView from "./abstract-view";
+import {createElement} from "./../util";
 
 export default class FooterView extends AbstractView {
   get template() {

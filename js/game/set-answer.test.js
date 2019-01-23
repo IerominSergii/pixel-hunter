@@ -22,9 +22,9 @@ describe(`setAnswer`, () => {
       setAnswer(getInitialState(), 11);
     }, /Wrong newAnswer type, should be string./);
   });
-  it(`shouldn't count unknown the 'ANSWER_POINTS' object result`, () => {
+  it(`shouldn't count unknown the 'bonuses' object result`, () => {
     assert.throws(() => {
       setAnswer(getInitialState(), `bebebe`);
-    }, /Unknown answer type, check the 'ANSWER_POINTS' object./);
+    }, /Unknown answer type, check the 'bonuses' object./);
   });
 });

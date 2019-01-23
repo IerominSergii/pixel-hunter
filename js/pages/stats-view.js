@@ -1,65 +1,20 @@
 import AbstractView from "../views/abstract-view";
-import countPoints from "../game/count-points";
-import {
-  ANSWERS_TYPES,
-  ANSWER_POINTS,
-  SAVED_LIFE_VALUE
-} from "../game/configuration";
-
-const FAST_BONUS = 50;
-const SLOW_BONUS = 50;
-
-const getTotalResults = (answers) => {
-  const correctAnswers = answers.filter((answer) => {
-    return answer !== ANSWERS_TYPES.WRONG && answer !== ANSWERS_TYPES.UNKNOWN;
-  });
-
-  return correctAnswers.length * ANSWER_POINTS.correct;
-};
-
-const getFastBonus = (fastAnswersAmount) => {
-  return fastAnswersAmount * FAST_BONUS;
-};
-
-const getSlowBonus = (slowAnswersAmount) => {
-  return slowAnswersAmount * SLOW_BONUS;
-};
-
-const getLivesBonus = (lives) => {
-  return lives * SAVED_LIFE_VALUE;
-};
-
-const getFastAnswers = (answers) => {
-  return answers.filter((answer) => {
-    return answer === ANSWERS_TYPES.FAST;
-  });
-};
-
-const getSlowAnswers = (answers) => {
-  return answers.filter((answer) => {
-    return answer === ANSWERS_TYPES.SLOW;
-  });
-};
+import {answersTypes} from "../game/configuration";
 
 export default class StatsView extends AbstractView {
-  constructor(state) {
+  constructor(name, answers, lives, totalResult, bonuses) {
     super();
-    this.state = state;
-    this.answers = this.state.answers;
-    this.lives = this.state.lives;
-    this.questions = this.state.questions;
-    this.totalResultFinal = countPoints(
-        this.answers,
-        this.lives,
-        this.questions.length
-    );
-    this.fastAnswers = getFastAnswers(this.answers);
-    this.slowAnswers = getSlowAnswers(this.answers);
+    this.name = name;
+    this.answers = answers;
+    this.lives = lives;
+    this.totalResult = totalResult;
+    this.bonuses = bonuses;
+    this._playerTemplate = () => this._getPlayerTemplate();
   }
 
   _getTitleTemplate() {
     return `<h2 class="result__title">${
-      this.totalResultFinal === -1 ? `Проиграл.` : `Победа!`
+      this.totalResult === -1 ? `Проиграл.` : `Победа!`
     }</h2>`;
   }
 
@@ -68,7 +23,7 @@ export default class StatsView extends AbstractView {
     ${this.answers
       .map((answer) => {
         return `<li class="stats__result stats__result--${
-          ANSWERS_TYPES[answer.toUpperCase()]
+          answersTypes[answer.toUpperCase()]
         }"></li>`;
       })
       .join(``)}
@@ -76,14 +31,18 @@ export default class StatsView extends AbstractView {
   }
 
   _getDetailsTemplate() {
-    const detailsTemplate = `<tr>
+    if (this.totalResult === -1) {
+      return ``;
+    }
+
+    return `<tr>
       <td></td>
       <td class="result__extra">Бонус за скорость:</td>
       <td class="result__extra">
         1 <span class="stats__result stats__result--fast"></span>
       </td>
-      <td class="result__points">${this.fastAnswers.length} × 50</td>
-      <td class="result__total">${getFastBonus(this.fastAnswers.length)}</td>
+      <td class="result__points">${this.bonuses.fast.amount} × 50</td>
+      <td class="result__total">${this.bonuses.fast.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -91,8 +50,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--alive"></span>
       </td>
-      <td class="result__points">${this.lives} × 50</td>
-      <td class="result__total">${getLivesBonus(this.lives)}</td>
+      <td class="result__points">${this.bonuses.life.amount} × 50</td>
+      <td class="result__total">${this.bonuses.life.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -100,29 +59,25 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--slow"></span>
       </td>
-      <td class="result__points">${this.slowAnswers.length} × 50</td>
-      <td class="result__total">-${getSlowBonus(this.slowAnswers.length)}</td>
+      <td class="result__points">${this.bonuses.slow.amount} × 50</td>
+      <td class="result__total">-${this.bonuses.slow.value}</td>
     </tr>`;
-
-    return this.totalResultFinal !== -1 ? detailsTemplate : ``;
   }
 
   _getPlayerTemplate() {
-    const {answers, name} = this.state;
-
     return `<table class="result__table">
     <tr>
-      <td class="result__number">1. ${name}</td>
+      <td class="result__number">1. ${this.name}</td>
       <td colspan="2">
       ${this._getAnswersTemplate()}
       </td>
-      <td class="result__points">${answers.length} × 100</td>
-      <td class="result__total">${getTotalResults(answers)}</td>
+      <td class="result__points">${this.answers.length} × 100</td>
+      <td class="result__total">${this.totalResult}</td>
     </tr>
     ${this._getDetailsTemplate()}
     <tr>
       <td colspan="5" class="result__total  result__total--final">${
-  this.totalResultFinal
+  this.totalResult
 }</td>
     </tr>
   </table>`;
@@ -131,7 +86,7 @@ export default class StatsView extends AbstractView {
   get template() {
     return `<section class="result">
     ${this._getTitleTemplate()}
-    ${this._getPlayerTemplate()}
+    ${this._playerTemplate()}
   </section>`;
   }
 }

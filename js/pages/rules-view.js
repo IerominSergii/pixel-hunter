@@ -61,9 +61,9 @@ export default class RulesView extends AbstractView {
     const rulesInput = this._element.querySelector(`.rules__input`);
     this._element.querySelector(`.rules__button`).disabled = true;
 
+    this.submitFormCallback();
     rulesInput.value = ``;
     rulesInput.focus();
-    this.submitFormCallback();
   }
 
   bind(element) {
