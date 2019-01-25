@@ -1,3 +1,6 @@
+export const DEFAULT_LIVES = 3;
+export const DEFAULT_TIMER = 30;
+
 export const getInitialState = () => {
   return Object.freeze({
     name: ``,
@@ -31,7 +34,3 @@ export const questionsType = {
   TWICE: `twice`,
   TRIPLE: `triple`
 };
-
-export const ANSWER_VALUE = 100;
-export const DEFAULT_LIVES = 3;
-export const DEFAULT_TIMER = 30;

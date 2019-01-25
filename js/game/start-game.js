@@ -1,4 +1,4 @@
-import {getInitialState, answersTypes, DEFAULT_LIVES} from "./configuration";
+import {getInitialState, answersTypes} from "./configuration";
 import {changeScreen, createElement, clearChildren} from "../util/util";
 import {questions} from "../data/data";
 import hasNextQuestion from "./has-next-question";
@@ -15,7 +15,7 @@ import activateGameState from "./activate-game-state";
 import HeaderView from "../views/header-view";
 import GreetingView from "../pages/greeting-view";
 import RulesView from "../pages/rules-view";
-import question from "./question";
+import getQuestionContainer from "./get-question-container";
 import StatsView from "../pages/stats-view";
 import countPoints from "./count-points";
 import getBonuses from "./get-bonuses";
@@ -39,9 +39,17 @@ const takePlayerName = () => {
 };
 
 const updateGameContent = (gameState) => {
+  const {answers, timer, lives} = gameState;
+  const {type, options} = questions[gameState.currentQuestion];
+
   clearChildren(gameContainerElement);
-  updateHeader(gameState);
-  updateQuestion(gameState);
+
+  gameContainerElement.appendChild(
+      new HeaderView(resetGameHandler, timer, lives).element
+  );
+  gameContainerElement.appendChild(
+      getQuestionContainer(type, options, answers, questions, userEventHandler)
+  );
 };
 
 const endGame = (gameState) => {
@@ -50,7 +58,7 @@ const endGame = (gameState) => {
   const bonuses = getBonuses(answers, lives);
 
   clearChildren(gameContainerElement);
-  updateHeader(gameState);
+  gameContainerElement.appendChild(new HeaderView(resetGameHandler).element);
   const statsElement = new StatsView(name, answers, lives, totalResult, bonuses)
     .element;
   gameContainerElement.appendChild(statsElement);
@@ -86,38 +94,14 @@ const resetGameHandler = () => {
   clearChildren(gameContainerElement);
   state = deactivateGameState(state);
   state = resetState(state);
-  updateHeader(state);
+  gameContainerElement.appendChild(new HeaderView(resetGameHandler).element);
   showGreeting();
 };
 
-const updateHeader = (gameState) => {
-  const newHeader = new HeaderView(
-      gameState.timer,
-      gameState.lives,
-      gameState.isGameActive,
-      DEFAULT_LIVES,
-      resetGameHandler
-  );
-  gameContainerElement.prepend(newHeader.element);
-};
-
-const updateQuestion = (gameState) => {
-  const {answers} = gameState;
-  const {type, options} = questions[gameState.currentQuestion];
-
-  const newQuestion = question(
-      type,
-      options,
-      answers,
-      questions,
-      userEventHandler
-  );
-  gameContainerElement.appendChild(newQuestion);
-};
-
 const playGame = () => {
-  updateHeader(state);
   state = activateGameState(state);
+
+  gameContainerElement.appendChild(new HeaderView(resetGameHandler).element);
   gameContainerElement.appendChild(rules.element);
   changeScreen(gameContainerElement);
 };

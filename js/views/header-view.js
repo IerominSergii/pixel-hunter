@@ -1,23 +1,25 @@
 import AbstractView from "./abstract-view";
 import BackButton from "../views/back-button-view";
 import {createElement} from "../util/util";
+import {DEFAULT_LIVES} from "../game/configuration";
 
 export default class HeaderView extends AbstractView {
-  constructor(timer, lives, isGameActive, defaultLives, callback) {
+  constructor(callback, timer = false, lives = false) {
     super();
     this.timer = timer;
     this.lives = lives;
-    this.isGameActive = isGameActive;
-    this.defaultLives = defaultLives;
     this.onBackButtonClick = callback;
   }
 
   getTimerTemplate() {
-    return `<div class="game__timer">${this.timer}</div>`;
+    return this.timer !== false
+      ? `<div class="game__timer">${this.timer}</div>`
+      : ``;
   }
 
   getLivesTemplate() {
-    return `<div class="game__lives">
+    return this.lives !== false
+      ? `<div class="game__lives">
     ${new Array(this.lives)
       .fill(
           `<img
@@ -30,7 +32,7 @@ export default class HeaderView extends AbstractView {
       )
       .join(``)}
   
-      ${new Array(this.defaultLives - this.lives)
+      ${new Array(DEFAULT_LIVES - this.lives)
         .fill(
             `<img
       src="img/heart__empty.svg"
@@ -41,12 +43,13 @@ export default class HeaderView extends AbstractView {
     />`
         )
         .join(``)}
-  </div>`;
+  </div>`
+      : ``;
   }
 
   get template() {
-    return `${this.isGameActive ? this.getTimerTemplate() : ``}
-    ${this.isGameActive ? this.getLivesTemplate() : ``}`;
+    return `${this.getTimerTemplate()}
+    ${this.getLivesTemplate()}`;
   }
 
   render() {

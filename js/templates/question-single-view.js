@@ -1,6 +1,6 @@
 import AbstractView from "../views/abstract-view";
 
-export default class QuestionSingle extends AbstractView {
+export default class QuestionSingleView extends AbstractView {
   constructor(option, callback) {
     super();
     this.option = option;

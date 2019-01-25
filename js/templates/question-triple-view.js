@@ -1,6 +1,6 @@
 import AbstractView from "../views/abstract-view";
 
-export default class QuestionTriple extends AbstractView {
+export default class QuestionTripleView extends AbstractView {
   constructor(options, callback) {
     super();
     this.options = options;
