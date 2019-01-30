@@ -1,4 +1,7 @@
-import introScreen from "./pages/intro";
 import {changeScreen} from "./util/util";
+import IntroView from "./pages/intro-view";
+import initGame from "./game/start-game";
 
-changeScreen(introScreen);
+const intro = new IntroView();
+intro.asteriskClickHandler = initGame;
+changeScreen(intro.element);

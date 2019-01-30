@@ -1,17 +1,20 @@
-import {createElement} from "../util/util";
+import AbstractView from "../views/abstract-view";
 
-const SINGLE_OPTION_INDEX = 0;
+export default class QuestionSingleView extends AbstractView {
+  constructor(option, callback) {
+    super();
+    this.option = option;
+    this.callback = callback;
+    this.onChoice = () => this.userChoiceHandler();
+  }
 
-export default (options, callback) => {
-  const questionOption = options[SINGLE_OPTION_INDEX];
-
-  const getTemplate = (option) => {
+  get template() {
     return `<p class="game__task">Угадай, фото или рисунок?</p>
   <form class="game__content  game__content--wide">
     <div class="game__option">
       <img
-        src="${option.src}"
-        alt="${option.alt}"
+        src="${this.option.src}"
+        alt="${this.option.alt}"
         width="705"
         height="455"
       />
@@ -35,17 +38,16 @@ export default (options, callback) => {
       </label>
     </div>
   </form>`;
-  };
+  }
 
-  const gameContentChangeHandler = () => {
+  userChoiceHandler() {
     const userAnswer = document.querySelector(`input:checked`).value;
-    callback(userAnswer === options[SINGLE_OPTION_INDEX].thisIs);
-  };
+    this.callback(userAnswer === this.option.thisIs);
+  }
 
-  const questionElement = createElement(getTemplate(questionOption));
-  questionElement
-    .querySelector(`.game__content`)
-    .addEventListener(`change`, gameContentChangeHandler);
-
-  return questionElement;
-};
+  bind(element) {
+    element
+      .querySelector(`.game__content`)
+      .addEventListener(`change`, this.onChoice);
+  }
+}

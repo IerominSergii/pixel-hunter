@@ -1,7 +1,10 @@
+const DEFAULT_LIVES_AMOUNT = 3;
+export const DEFAULT_TIMER = 30;
+
 export const getInitialState = () => {
   return Object.freeze({
     name: ``,
-    lives: DEFAULT_LIVES,
+    lives: DEFAULT_LIVES_AMOUNT,
     isGameActive: false,
     answers: Object.freeze([]),
     questions: Object.freeze([]),
@@ -10,14 +13,16 @@ export const getInitialState = () => {
   });
 };
 
-export const ANSWER_POINTS = {
-  correct: 100,
-  fast: 150,
-  slow: 50,
-  wrong: 0
+export const bonusValue = {
+  CORRECT: 100,
+  FAST: 50,
+  SLOW: 50,
+  WRONG: 0,
+  LIFE: 50,
+  UNKNOWN: 0
 };
 
-export const ANSWERS_TYPES = {
+export const answersTypes = {
   CORRECT: `correct`,
   FAST: `fast`,
   SLOW: `slow`,
@@ -30,7 +35,3 @@ export const questionsType = {
   TWICE: `twice`,
   TRIPLE: `triple`
 };
-
-export const SAVED_LIFE_VALUE = 50;
-export const DEFAULT_LIVES = 3;
-export const DEFAULT_TIMER = 30;
