@@ -2,19 +2,19 @@ import AbstractView from "../views/abstract-view";
 import {answersTypes} from "../game/configuration";
 
 export default class StatsView extends AbstractView {
-  constructor(name, answers, lives, totalResult, bonuses) {
+  constructor(name, answers, lives, results) {
     super();
     this.name = name;
     this.answers = answers;
     this.lives = lives;
-    this.totalResult = totalResult;
-    this.bonuses = bonuses;
+    this.results = results;
+    this.finalResult = results.final.value;
     this._playerTemplate = () => this._getPlayerTemplate();
   }
 
   _getTitleTemplate() {
     return `<h2 class="result__title">${
-      this.totalResult === -1 ? `Проиграл.` : `Победа!`
+      this.results.final.value === -1 ? `Проиграл.` : `Победа!`
     }</h2>`;
   }
 
@@ -31,7 +31,7 @@ export default class StatsView extends AbstractView {
   }
 
   _getDetailsTemplate() {
-    if (this.totalResult === -1) {
+    if (this.results.final.value === -1) {
       return ``;
     }
 
@@ -41,8 +41,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         1 <span class="stats__result stats__result--fast"></span>
       </td>
-      <td class="result__points">${this.bonuses.fast.amount} × 50</td>
-      <td class="result__total">${this.bonuses.fast.value}</td>
+      <td class="result__points">${this.results.fast.amount} × 50</td>
+      <td class="result__total">${this.results.fast.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -50,17 +50,17 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--alive"></span>
       </td>
-      <td class="result__points">${this.bonuses.life.amount} × 50</td>
-      <td class="result__total">${this.bonuses.life.value}</td>
+      <td class="result__points">${this.lives} × 50</td>
+      <td class="result__total">${this.results.life.value}</td>
       </tr>
       <tr>
       <td></td>
       <td class="result__extra">Штраф за медлительность:</td>
       <td class="result__extra">
-        2 <span class="stats__result stats__result--slow"></span>
+        3 <span class="stats__result stats__result--slow"></span>
       </td>
-      <td class="result__points">${this.bonuses.slow.amount} × 50</td>
-      <td class="result__total">-${this.bonuses.slow.value}</td>
+      <td class="result__points">${this.results.slow.amount} × 50</td>
+      <td class="result__total">-${this.results.slow.value}</td>
     </tr>`;
   }
 
@@ -71,13 +71,17 @@ export default class StatsView extends AbstractView {
       <td colspan="2">
       ${this._getAnswersTemplate()}
       </td>
-      <td class="result__points">${this.answers.length} × 100</td>
-      <td class="result__total">${this.totalResult}</td>
+      <td class="result__points">${
+  this.finalResult === -1 ? this.finalResult : this.results.total.amount
+} × 100</td>
+      <td class="result__total">${
+  this.finalResult === -1 ? this.finalResult : this.results.total.value
+}</td>
     </tr>
     ${this._getDetailsTemplate()}
     <tr>
       <td colspan="5" class="result__total  result__total--final">${
-  this.totalResult
+  this.finalResult
 }</td>
     </tr>
   </table>`;

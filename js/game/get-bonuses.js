@@ -1,24 +1,33 @@
-import {bonuses, answersTypes} from "./configuration";
+import {bonusValue, answersTypes} from "./configuration";
 
-const getPointBonus = (amount, bonusType) => {
-  const answersAmount = amount.filter((answer) => {
-    return answer === bonusType;
-  }).length;
+const getPointBonus = (answers) => {
+  const bonuses = {
+    [answersTypes.CORRECT]: {value: 0, amount: 0},
+    [answersTypes.FAST]: {value: 0, amount: 0},
+    [answersTypes.SLOW]: {value: 0, amount: 0},
+    [answersTypes.WRONG]: {value: 0, amount: 0},
+    [answersTypes.UNKNOWN]: {value: 0, amount: 0}
+  };
 
-  const bonus = answersAmount * bonuses[bonusType.toUpperCase()];
-  return {value: bonus, amount: answersAmount};
+  answers.forEach((answer) => {
+    bonuses[answersTypes[answer.toUpperCase()]].amount += 1;
+  });
+
+  for (const type in bonuses) {
+    if (bonuses.hasOwnProperty(type)) {
+      bonuses[type].value =
+        bonuses[type].amount * bonusValue[type.toUpperCase()];
+    }
+  }
+
+  return bonuses;
 };
 
 const getLifeBonus = (amount) => {
-  const bonus = amount * bonuses.LIFE;
-  return {value: bonus, amount};
+  const bonus = amount * bonusValue.LIFE;
+  return {life: {value: bonus}};
 };
 
 export default (answers, lives) => {
-  return {
-    correct: getPointBonus(answers, answersTypes.CORRECT),
-    fast: getPointBonus(answers, answersTypes.FAST),
-    slow: getPointBonus(answers, answersTypes.SLOW),
-    life: getLifeBonus(lives)
-  };
+  return Object.assign({}, getPointBonus(answers), getLifeBonus(lives));
 };

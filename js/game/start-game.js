@@ -18,7 +18,6 @@ import RulesView from "../pages/rules-view";
 import getQuestionContainer from "./get-question-container";
 import StatsView from "../pages/stats-view";
 import countPoints from "./count-points";
-import getBonuses from "./get-bonuses";
 
 const initialState = getInitialState();
 let state;
@@ -54,13 +53,11 @@ const updateGameContent = (gameState) => {
 
 const endGame = (gameState) => {
   const {name, answers, lives} = gameState;
-  const totalResult = countPoints(answers, lives, questions.length);
-  const bonuses = getBonuses(answers, lives);
+  const results = countPoints(answers, lives, questions.length);
 
   clearChildren(gameContainerElement);
   gameContainerElement.appendChild(new HeaderView(resetGameHandler).element);
-  const statsElement = new StatsView(name, answers, lives, totalResult, bonuses)
-    .element;
+  const statsElement = new StatsView(name, answers, lives, results).element;
   gameContainerElement.appendChild(statsElement);
 };
 

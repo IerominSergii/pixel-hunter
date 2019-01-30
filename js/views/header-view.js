@@ -1,7 +1,8 @@
 import AbstractView from "./abstract-view";
 import BackButton from "../views/back-button-view";
 import {createElement} from "../util/util";
-import {DEFAULT_LIVES} from "../game/configuration";
+
+const TOTAL_LIVES_AMOUNT = 3;
 
 export default class HeaderView extends AbstractView {
   constructor(callback, timer = false, lives = false) {
@@ -32,7 +33,7 @@ export default class HeaderView extends AbstractView {
       )
       .join(``)}
   
-      ${new Array(DEFAULT_LIVES - this.lives)
+      ${new Array(TOTAL_LIVES_AMOUNT - this.lives)
         .fill(
             `<img
       src="img/heart__empty.svg"

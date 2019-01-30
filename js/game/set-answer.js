@@ -1,11 +1,11 @@
-import {bonuses} from "./configuration";
+import {bonusValue} from "./configuration";
 
 export default (state, newAnswer) => {
   if (typeof newAnswer !== `string`) {
     throw new Error(`Wrong newAnswer type, should be string.`);
   }
 
-  if (isNaN(bonuses[newAnswer.toUpperCase()])) {
+  if (isNaN(bonusValue[newAnswer.toUpperCase()])) {
     throw new Error(`Unknown answer type, check the 'bonuses' object.`);
   }
 
