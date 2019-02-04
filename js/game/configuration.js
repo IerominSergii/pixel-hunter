@@ -9,7 +9,7 @@ export const getInitialState = () => {
     answers: Object.freeze([]),
     questions: Object.freeze([]),
     currentQuestion: 0,
-    timer: DEFAULT_TIMER
+    time: DEFAULT_TIMER
   });
 };
 
