@@ -1,4 +1,4 @@
-import {answersTypes} from "./configuration";
+import {answersTypes} from "../configuration";
 
 export default (isAnswerCorrect, time) => {
   if (typeof isAnswerCorrect !== `boolean`) {

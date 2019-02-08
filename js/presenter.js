@@ -1,4 +1,4 @@
-import {answersTypes} from "./game/configuration";
+import {answersTypes} from "./configuration";
 import {changeScreen, createElement, clearChildren} from "./util/util";
 import GreetingView from "./pages/greeting-view";
 import HeaderView from "./views/header-view";
@@ -32,6 +32,9 @@ export default class Presenter {
     this.resetGameHandler = () => {
       this.resetGame();
     };
+    this.updateContent = () => {
+      this.updateGameContent();
+    };
   }
 
   get element() {
@@ -64,7 +67,7 @@ export default class Presenter {
   }
 
   startTimer() {
-    const {time, lives} = this.model._state;
+    const {time, lives} = this.model.state;
 
     if (time <= 0) {
       this.changeQuestion(false);
@@ -77,17 +80,17 @@ export default class Presenter {
   }
 
   endTimer() {
-    const {time, lives} = this.model._state;
+    const {time, lives} = this.model.state;
 
     clearTimeout(this.timer);
-    this.model.resetTimer();
+    this.model.resetTime();
     this.updateHeader(time, lives);
   }
 
   endGameCallback() {}
 
   endGame() {
-    const {name, answers, lives, questions} = this.model._state;
+    const {name, answers, lives, questions} = this.model.state;
     const results = countPoints(answers, lives, questions.length);
 
     this.endTimer();
@@ -122,7 +125,7 @@ export default class Presenter {
       time,
       lives,
       answers
-    } = this.model._state;
+    } = this.model.state;
     const {type, options} = questions[currentQuestion];
 
     this.updateHeader(time, lives);
@@ -141,7 +144,7 @@ export default class Presenter {
   rulesInputHandler() {
     const userName = document.querySelector(`.rules__input`).value;
     this.model.name = userName;
-    this.updateGameContent(this.model._state);
+    this.updateContent(this.model.state);
     changeScreen(this.gameElement);
     this.startTimer();
   }

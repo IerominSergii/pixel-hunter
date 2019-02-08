@@ -1,5 +1,5 @@
 import AbstractView from "../views/abstract-view";
-import {answersTypes} from "../game/configuration";
+import {answersTypes} from "../configuration";
 
 export default class StatsView extends AbstractView {
   constructor(name, answers, lives, results) {

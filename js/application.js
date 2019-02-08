@@ -9,8 +9,6 @@ const questions = questionsData();
 
 export default class Application {
   constructor() {
-    this.model = new Model();
-    this.presenter = new Presenter(this.model);
     this.onIntroClick = () => {
       this.startGame();
     };
@@ -25,10 +23,13 @@ export default class Application {
   }
 
   startGame() {
-    this.presenter.endGameCallback = this.endGame;
-    this.model.setQuestions(questions);
-    changeScreen(this.presenter.element);
-    this.presenter.initGame();
+    const model = new Model();
+    const presenter = new Presenter(model);
+    presenter.endGameCallback = this.endGame;
+    model.questions = questions;
+
+    changeScreen(presenter.element);
+    presenter.initGame();
   }
 
   showStats(name, answers, lives, results) {
