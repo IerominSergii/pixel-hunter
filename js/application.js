@@ -1,4 +1,4 @@
-import {changeScreen} from "./util/util";
+import {changeScreen, clearChildren} from "./util/util";
 import IntroView from "./pages/intro-view";
 import StatsView from "./pages/stats-view";
 import Model from "./model";
@@ -12,8 +12,8 @@ export default class Application {
     this.onIntroClick = () => {
       this.startGame();
     };
-    this.endGame = (name, answers, lives, results) => {
-      this.showStats(name, answers, lives, results);
+    this.endGame = (name, answers, lives, results, goBackCallback) => {
+      this.showStats(name, answers, lives, results, goBackCallback);
     };
   }
 
@@ -24,16 +24,17 @@ export default class Application {
 
   startGame() {
     const model = new Model();
+    model.questions = questions;
     const presenter = new Presenter(model);
     presenter.endGameCallback = this.endGame;
-    model.questions = questions;
 
     changeScreen(presenter.element);
     presenter.initGame();
   }
 
-  showStats(name, answers, lives, results) {
+  static showStats(name, answers, lives, results, container) {
     const statsElement = new StatsView(name, answers, lives, results).element;
-    this.presenter.renderToSubContainer(statsElement);
+    clearChildren(container);
+    container.appendChild(statsElement);
   }
 }

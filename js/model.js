@@ -62,6 +62,10 @@ export default class Model {
     this._state = setCurrentQuestion(this._state, currentQuestion);
   }
 
+  get questions() {
+    return this._state.questions;
+  }
+
   set questions(questions) {
     this._state = setQuestions(this._state, questions);
   }
@@ -75,7 +79,7 @@ export default class Model {
   }
 
   activateGameState() {
-    this._state = activateGameState();
+    this._state = activateGameState(this._state);
   }
 
   canContinue() {

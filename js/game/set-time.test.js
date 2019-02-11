@@ -4,7 +4,7 @@ import {getInitialState} from "./../configuration";
 
 describe(`setTimerTime. Correct results:`, () => {
   it(`should set the time`, () => {
-    assert.equal(setTimerTime(getInitialState(), 30).timer, 30);
+    assert.equal(setTimerTime(getInitialState(), 30).time, 30);
   });
 });
 
