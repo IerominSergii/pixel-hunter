@@ -5,9 +5,7 @@ export default class RulesView extends AbstractView {
   constructor(callback) {
     super();
     this.submitFormCallback = callback;
-    this.onSubmit = (evt) => {
-      this._submitFormHandler(evt);
-    };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   get template() {
@@ -57,13 +55,12 @@ export default class RulesView extends AbstractView {
     return createElement(this.template, `section`, `rules`);
   }
 
-  _submitFormHandler() {
+  onSubmit() {
     const rulesInput = this._element.querySelector(`.rules__input`);
     this._element.querySelector(`.rules__button`).disabled = true;
 
     this.submitFormCallback();
     rulesInput.value = ``;
-    rulesInput.focus();
   }
 
   bind(element) {
@@ -74,6 +71,5 @@ export default class RulesView extends AbstractView {
     this._enableRulesButton(rulesInput, rulesButton);
 
     rulesForm.addEventListener(`submit`, this.onSubmit);
-    rulesInput.focus();
   }
 }

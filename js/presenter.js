@@ -9,103 +9,75 @@ import defineAnswer from "./game/define-answer";
 import countPoints from "./game/count-points";
 import Application from "./application";
 
-const ONE_SECOND = 1000;
-let _timer;
-
+// const ONE_SECOND = 1000;
 export default class Presenter {
   constructor(model) {
     this.model = model;
     this.gameElement = createElement(``, `div`, `gameElement`);
-    this.headerElement = createElement();
-    this.gameSubContainer = createElement();
 
-    this.gameElement.appendChild(this.gameSubContainer);
-
-    // _timer = null;
-    this.playGameHandler = () => {
-      this.playGame();
-    };
-    this.rulesHandler = (evt) => {
-      this.rulesInputHandler(evt);
-    };
-    this.userEventHandler = (isAnswerCorrect) => {
-      this.changeQuestion(isAnswerCorrect);
-    };
-    this.resetGameHandler = () => {
-      this.resetGame();
-    };
-    this.updateContent = () => {
-      this.updateGameContent();
-    };
+    // this._timer = null;
+    this.playGame = this.playGame.bind(this);
+    this.resetGame = this.resetGame.bind(this);
+    this.rulesHandler = this.rulesHandler.bind(this);
+    this.changeQuestion = this.changeQuestion.bind(this);
+    this.updateGameContent = this.updateGameContent.bind(this);
   }
 
   get element() {
     return this.gameElement;
   }
 
-  renderToSubContainer(element) {
-    clearChildren(this.gameSubContainer);
-    this.gameSubContainer.appendChild(element);
-  }
-
   resetGame() {
-    this.endTimer();
+    // this.endTimer();
     this.model.deactivateGameState();
     this.model.resetState();
 
-    clearChildren(this.gameSubContainer);
+    clearChildren(this.gameElement);
     this.initGame();
   }
 
   updateHeader(time = false, lives = false) {
-    clearChildren(this.headerElement);
-    this.headerElement.appendChild(
-        new HeaderView(this.resetGameHandler, time, lives).element
-    );
+    this.header = new HeaderView(this.resetGame, time, lives).element;
   }
 
-  startTimer() {
-    const time = this.model.time;
-    const lives = this.model.lives;
+  // startTimer() {
+  //   const time = this.model.time;
+  //   const lives = this.model.lives;
 
-    if (time <= 0) {
-      clearTimeout(_timer);
-      // !!!!!!!!!!!!!!!!!!!!!!!!!!
-      // this.endTimer();
-      this.userEventHandler(false);
-      // this.model.resetTime();
-    }
+  //   if (time <= 0) {
+  //     clearTimeout(this._timer);
+  //     this.endTimer();
+  //     this.changeQuestion(false);
+  //     this.model.resetTime();
+  //   }
 
-    clearTimeout(_timer);
-    _timer = setTimeout(() => {
-      this.updateHeader(time, lives);
-      this.model.tick();
-      this.startTimer();
-    }, ONE_SECOND);
-  }
+  //   clearTimeout(this._timer);
+  //   this._timer = setTimeout(() => {
+  //     this.updateHeader(time, lives);
+  //     this.model.tick();
+  //     this.startTimer();
+  //   }, ONE_SECOND);
+  // }
 
-  endTimer() {
-    // const time = this.model.time;
-    // const lives = this.model.lives;
-
-    clearTimeout(_timer);
-    // this.updateHeader(time, lives);
-    this.model.resetTime();
-  }
+  // endTimer() {
+  //   const time = this.model.time;
+  //   const lives = this.model.lives;
+  //   clearTimeout(this._timer);
+  //   this.updateHeader(time, lives);
+  //   this.model.resetTime();
+  // }
 
   endGame() {
-    clearTimeout(_timer);
+    // clearTimeout(this._timer);
     const name = this.model.name;
     const answers = this.model.answers;
     const lives = this.model.lives;
     const questions = this.model.questions;
     const results = countPoints(answers, lives, questions.length);
 
-    // this.endTimer();
     this.updateHeader();
-    clearChildren(this.gameSubContainer);
-
-    Application.showStats(name, answers, lives, results, this.gameSubContainer);
+    clearChildren(this.gameElement);
+    Application.showStats(name, answers, lives, results);
   }
 
   changeQuestion(isCurrentAnswerCorrect = false) {
@@ -122,63 +94,60 @@ export default class Presenter {
     if (this.model.canContinue() && this.model.hasNextQuestion()) {
       this.model.currentQuestion = this.model.currentQuestion + 1;
 
-      this.model.resetTime();
+      // this.model.resetTime();
       this.updateHeader(time, lives);
       this.updateGameContent();
 
-      this.startTimer();
+      // this.startTimer();
     } else {
       this.model.deactivateGameState();
-      clearTimeout(_timer);
+      // clearTimeout(this._timer);
       this.endGame();
     }
   }
 
   updateGameContent() {
-    // const time = this.model.time;
-    // const lives = this.model.lives;
+    const time = this.model.time;
+    const lives = this.model.lives;
     const answers = this.model.answers;
     const questions = this.model.questions;
     const currentQuestion = this.model.currentQuestion;
     const {type, options} = questions[currentQuestion];
 
-    // this.updateHeader(time, lives);
-    clearChildren(this.gameSubContainer);
-    this.gameSubContainer.appendChild(
+    clearChildren(this.gameElement);
+    this.gameElement.appendChild(
+        new HeaderView(this.resetGame, time, lives).element
+    );
+    this.gameElement.appendChild(
         getQuestionContainer(
             type,
             options,
             answers,
             questions,
-            this.userEventHandler
+            this.changeQuestion
         )
     );
   }
 
-  rulesInputHandler() {
+  rulesHandler() {
     const userName = document.querySelector(`.rules__input`).value;
-
     this.model.name = userName;
-
     this.updateGameContent();
     changeScreen(this.gameElement);
-    this.startTimer();
+    // this.startTimer();
   }
 
   playGame() {
-    this.gameElement.prepend(this.headerElement);
-    this.updateHeader();
-
+    clearChildren(this.gameElement);
     this.model.activateGameState();
-
-    clearChildren(this.gameSubContainer);
-    this.gameSubContainer.appendChild(new RulesView(this.rulesHandler).element);
+    this.header = new HeaderView(this.resetGame).element;
+    this.gameElement.appendChild(this.header);
+    this.gameElement.appendChild(new RulesView(this.rulesHandler).element);
   }
 
   initGame() {
-    clearChildren(this.headerElement);
-    clearChildren(this.gameSubContainer);
-    const greeting = new GreetingView(this.playGameHandler);
-    this.gameSubContainer.appendChild(greeting.element);
+    clearChildren(this.gameElement);
+    const greeting = new GreetingView(this.playGame);
+    this.gameElement.appendChild(greeting.element);
   }
 }
