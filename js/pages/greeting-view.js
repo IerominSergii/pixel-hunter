@@ -1,12 +1,8 @@
 import AbstractView from "../views/abstract-view";
 import {createElement} from "../util/util";
+import Application from "../application";
 
 export default class GreetingView extends AbstractView {
-  constructor(callback) {
-    super();
-    this.continueClickHandler = callback;
-  }
-
   get template() {
     return `<img
       class="greeting__logo"
@@ -55,7 +51,10 @@ export default class GreetingView extends AbstractView {
 
   bind() {
     const greetingContinue = this._element.querySelector(`.greeting__continue`);
+    const continueClickHandler = () => {
+      Application.showRules();
+    };
 
-    greetingContinue.addEventListener(`click`, this.continueClickHandler);
+    greetingContinue.addEventListener(`click`, continueClickHandler);
   }
 }

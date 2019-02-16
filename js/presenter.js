@@ -1,8 +1,6 @@
 import {answersTypes} from "./configuration";
 import {changeScreen, createElement, clearChildren} from "./util/util";
-import GreetingView from "./pages/greeting-view";
 import HeaderView from "./views/header-view";
-import RulesView from "./pages/rules-view";
 
 import getQuestionContainer from "./game/get-question-container";
 import defineAnswer from "./game/define-answer";
@@ -16,11 +14,8 @@ export default class Presenter {
     this.gameElement = createElement(``, `div`, `gameElement`);
 
     // this._timer = null;
-    this.playGame = this.playGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
-    this.rulesHandler = this.rulesHandler.bind(this);
     this.changeQuestion = this.changeQuestion.bind(this);
-    this.updateGameContent = this.updateGameContent.bind(this);
   }
 
   get element() {
@@ -33,7 +28,8 @@ export default class Presenter {
     this.model.resetState();
 
     clearChildren(this.gameElement);
-    this.initGame();
+    // this.playGame();
+    Application.showGreeting();
   }
 
   updateHeader(time = false, lives = false) {
@@ -75,13 +71,11 @@ export default class Presenter {
     const questions = this.model.questions;
     const results = countPoints(answers, lives, questions.length);
 
-    this.updateHeader();
-    clearChildren(this.gameElement);
     Application.showStats(name, answers, lives, results);
   }
 
   changeQuestion(isCurrentAnswerCorrect = false) {
-    this.endTimer();
+    // this.endTimer();
     const time = this.model.time;
     const lives = this.model.lives;
     const answerType = defineAnswer(isCurrentAnswerCorrect, time);
@@ -129,25 +123,10 @@ export default class Presenter {
     );
   }
 
-  rulesHandler() {
-    const userName = document.querySelector(`.rules__input`).value;
-    this.model.name = userName;
+  playGame() {
+    this.model.activateGameState();
     this.updateGameContent();
     changeScreen(this.gameElement);
     // this.startTimer();
-  }
-
-  playGame() {
-    clearChildren(this.gameElement);
-    this.model.activateGameState();
-    this.header = new HeaderView(this.resetGame).element;
-    this.gameElement.appendChild(this.header);
-    this.gameElement.appendChild(new RulesView(this.rulesHandler).element);
-  }
-
-  initGame() {
-    clearChildren(this.gameElement);
-    const greeting = new GreetingView(this.playGame);
-    this.gameElement.appendChild(greeting.element);
   }
 }

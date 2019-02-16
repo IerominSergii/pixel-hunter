@@ -1,12 +1,8 @@
 import AbstractView from "../views/abstract-view";
 import {createElement} from "../util/util";
+import Application from "../application";
 
 export default class IntroView extends AbstractView {
-  constructor(callback) {
-    super();
-    this.callback = callback;
-  }
-
   get template() {
     return `<button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
     <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>`;
@@ -18,6 +14,9 @@ export default class IntroView extends AbstractView {
 
   bind(element) {
     const asterisk = element.querySelector(`.intro__asterisk`);
-    asterisk.addEventListener(`click`, this.callback);
+    const asteriskClickHandler = () => {
+      Application.showGreeting();
+    };
+    asterisk.addEventListener(`click`, asteriskClickHandler);
   }
 }

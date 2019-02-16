@@ -1,10 +1,11 @@
 import AbstractView from "../views/abstract-view";
 import {createElement} from "../util/util";
+import Application from "../application";
+import HeaderView from "../views/header-view";
 
 export default class RulesView extends AbstractView {
-  constructor(callback) {
+  constructor() {
     super();
-    this.submitFormCallback = callback;
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -52,15 +53,19 @@ export default class RulesView extends AbstractView {
   }
 
   render() {
-    return createElement(this.template, `section`, `rules`);
+    const rulesContainer = createElement();
+
+    rulesContainer.appendChild(
+        new HeaderView(Application.showGreeting).element
+    );
+    rulesContainer.appendChild(
+        createElement(this.template, `section`, `rules`)
+    );
+    return rulesContainer;
   }
 
   onSubmit() {
-    const rulesInput = this._element.querySelector(`.rules__input`);
-    this._element.querySelector(`.rules__button`).disabled = true;
-
-    this.submitFormCallback();
-    rulesInput.value = ``;
+    Application.startGame(this._element.querySelector(`.rules__input`).value);
   }
 
   bind(element) {
@@ -69,7 +74,6 @@ export default class RulesView extends AbstractView {
     const rulesButton = rulesForm.querySelector(`.rules__button`);
 
     this._enableRulesButton(rulesInput, rulesButton);
-
     rulesForm.addEventListener(`submit`, this.onSubmit);
   }
 }

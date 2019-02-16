@@ -1,34 +1,38 @@
-import {changeScreen, createElement} from "./util/util";
+import {changeScreen} from "./util/util";
 import IntroView from "./pages/intro-view";
+import GreetingView from "./pages/greeting-view";
+import RulesView from "./pages/rules-view";
 import StatsView from "./pages/stats-view";
 import Model from "./model";
 import questionsData from "./data/data";
 import Presenter from "./presenter";
-import HeaderView from "./views/header-view";
 
 const questions = questionsData();
 
 export default class Application {
-  showIntro() {
-    const intro = new IntroView(this.startGame);
-    changeScreen(intro.element);
+  static showIntro() {
+    changeScreen(new IntroView().element);
   }
 
-  startGame() {
+  static showGreeting() {
+    changeScreen(new GreetingView().element);
+  }
+
+  static showRules() {
+    changeScreen(new RulesView().element);
+  }
+
+  static startGame(name) {
     const model = new Model();
     model.questions = questions;
+    model.name = name;
     const presenter = new Presenter(model);
 
     changeScreen(presenter.element);
-    presenter.initGame();
+    presenter.playGame();
   }
 
   static showStats(name, answers, lives, results) {
-    const statsContainer = createElement();
-    statsContainer.appendChild(new HeaderView(this.startGame).element);
-    statsContainer.appendChild(
-        new StatsView(name, answers, lives, results).element
-    );
-    changeScreen(statsContainer);
+    changeScreen(new StatsView(name, answers, lives, results).element);
   }
 }
