@@ -1,6 +1,5 @@
-import AbstractView from "../views/abstract-view";
-import {createElement} from "../util/util";
-import Application from "../application";
+import AbstractView from "../../views/abstract-view";
+import {createElement} from "../../util/util";
 
 export default class IntroView extends AbstractView {
   get template() {
@@ -12,11 +11,11 @@ export default class IntroView extends AbstractView {
     return createElement(this.template, `section`, `intro`);
   }
 
+  asteriskClickHandler() {}
+
   bind(element) {
     const asterisk = element.querySelector(`.intro__asterisk`);
-    const asteriskClickHandler = () => {
-      Application.showGreeting();
-    };
-    asterisk.addEventListener(`click`, asteriskClickHandler);
+
+    asterisk.addEventListener(`click`, this.asteriskClickHandler);
   }
 }

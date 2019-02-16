@@ -1,12 +1,12 @@
-import AbstractView from "../views/abstract-view";
-import {createElement} from "../util/util";
-import Application from "../application";
-import HeaderView from "../views/header-view";
+import AbstractView from "../../views/abstract-view";
+import {createElement} from "../../util/util";
+import Application from "../../application";
+import HeaderView from "../../views/header-view";
 
 export default class RulesView extends AbstractView {
   constructor() {
     super();
-    this.onSubmit = this.onSubmit.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
   }
 
   get template() {
@@ -64,9 +64,7 @@ export default class RulesView extends AbstractView {
     return rulesContainer;
   }
 
-  onSubmit() {
-    Application.startGame(this._element.querySelector(`.rules__input`).value);
-  }
+  onSubmit() {}
 
   bind(element) {
     const rulesForm = element.querySelector(`.rules__form`);
@@ -74,6 +72,9 @@ export default class RulesView extends AbstractView {
     const rulesButton = rulesForm.querySelector(`.rules__button`);
 
     this._enableRulesButton(rulesInput, rulesButton);
-    rulesForm.addEventListener(`submit`, this.onSubmit);
+    rulesForm.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      this.onSubmit(rulesInput.value);
+    });
   }
 }

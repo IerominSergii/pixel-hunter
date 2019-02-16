@@ -1,6 +1,6 @@
-import AbstractView from "../views/abstract-view";
-import {createElement} from "../util/util";
-import Application from "../application";
+import AbstractView from "../../views/abstract-view";
+import {createElement} from "../../util/util";
+import Application from "../../application";
 
 export default class GreetingView extends AbstractView {
   get template() {
@@ -49,12 +49,11 @@ export default class GreetingView extends AbstractView {
     ]);
   }
 
+  continueClickHandler() {}
+
   bind() {
     const greetingContinue = this._element.querySelector(`.greeting__continue`);
-    const continueClickHandler = () => {
-      Application.showRules();
-    };
 
-    greetingContinue.addEventListener(`click`, continueClickHandler);
+    greetingContinue.addEventListener(`click`, this.continueClickHandler);
   }
 }

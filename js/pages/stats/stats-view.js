@@ -1,8 +1,7 @@
-import AbstractView from "../views/abstract-view";
-import HeaderView from "../views/header-view";
-import Application from "../application";
-import {answersTypes} from "../configuration";
-import {createElement} from "../util/util";
+import AbstractView from "../../views/abstract-view";
+import HeaderView from "../../views/header-view";
+import {answersTypes} from "../../configuration";
+import {createElement} from "../../util/util";
 
 export default class StatsView extends AbstractView {
   constructor(name, answers, lives, results) {
@@ -95,12 +94,12 @@ export default class StatsView extends AbstractView {
     ${this._playerTemplate()}`;
   }
 
+  onBackButtonClick() {}
+
   render() {
     const statsContainer = createElement();
 
-    statsContainer.appendChild(
-        new HeaderView(Application.showGreeting).element
-    );
+    statsContainer.appendChild(new HeaderView(this.onBackButtonClick).element);
     statsContainer.appendChild(
         createElement(this.template, `section`, `result`)
     );

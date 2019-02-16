@@ -1,25 +1,25 @@
 import {changeScreen} from "./util/util";
-import IntroView from "./pages/intro-view";
-import GreetingView from "./pages/greeting-view";
-import RulesView from "./pages/rules-view";
-import StatsView from "./pages/stats-view";
 import Model from "./model";
 import questionsData from "./data/data";
 import Presenter from "./presenter";
+import introPresenter from "./pages/intro/intro-presenter";
+import greetingPresenter from "./pages/greeting/greeting-presenter";
+import rulesPresenter from "./pages/rules/rules-presenter";
+import statsPresenter from "./pages/stats/stats-presenter";
 
 const questions = questionsData();
 
 export default class Application {
   static showIntro() {
-    changeScreen(new IntroView().element);
+    changeScreen(introPresenter());
   }
 
   static showGreeting() {
-    changeScreen(new GreetingView().element);
+    changeScreen(greetingPresenter());
   }
 
   static showRules() {
-    changeScreen(new RulesView().element);
+    changeScreen(rulesPresenter());
   }
 
   static startGame(name) {
@@ -33,6 +33,6 @@ export default class Application {
   }
 
   static showStats(name, answers, lives, results) {
-    changeScreen(new StatsView(name, answers, lives, results).element);
+    changeScreen(statsPresenter(name, answers, lives, results));
   }
 }

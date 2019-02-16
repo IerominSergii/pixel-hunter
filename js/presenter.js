@@ -7,13 +7,14 @@ import defineAnswer from "./game/define-answer";
 import countPoints from "./game/count-points";
 import Application from "./application";
 
-// const ONE_SECOND = 1000;
+const ONE_SECOND = 1000;
 export default class Presenter {
   constructor(model) {
     this.model = model;
     this.gameElement = createElement(``, `div`, `gameElement`);
+    this.header = null;
 
-    // this._timer = null;
+    this._timer = null;
     this.resetGame = this.resetGame.bind(this);
     this.changeQuestion = this.changeQuestion.bind(this);
   }
@@ -23,48 +24,42 @@ export default class Presenter {
   }
 
   resetGame() {
-    // this.endTimer();
+    this.endTimer();
     this.model.deactivateGameState();
     this.model.resetState();
 
     clearChildren(this.gameElement);
-    // this.playGame();
     Application.showGreeting();
   }
 
   updateHeader(time = false, lives = false) {
-    this.header = new HeaderView(this.resetGame, time, lives).element;
+    const newHeader = new HeaderView(this.resetGame, time, lives).element;
+    this.gameElement.replaceChild(newHeader, this.header);
+
+    this.header = newHeader;
   }
 
-  // startTimer() {
-  //   const time = this.model.time;
-  //   const lives = this.model.lives;
+  startTimer() {
+    if (this.model.time <= 0) {
+      this.changeQuestion(false);
+    } else {
+      this._timer = setTimeout(() => {
+        this.model.tick();
+        this.updateHeader(this.model.time, this.model.lives);
+        this.startTimer();
+      }, ONE_SECOND);
+    }
+  }
 
-  //   if (time <= 0) {
-  //     clearTimeout(this._timer);
-  //     this.endTimer();
-  //     this.changeQuestion(false);
-  //     this.model.resetTime();
-  //   }
-
-  //   clearTimeout(this._timer);
-  //   this._timer = setTimeout(() => {
-  //     this.updateHeader(time, lives);
-  //     this.model.tick();
-  //     this.startTimer();
-  //   }, ONE_SECOND);
-  // }
-
-  // endTimer() {
-  //   const time = this.model.time;
-  //   const lives = this.model.lives;
-  //   clearTimeout(this._timer);
-  //   this.updateHeader(time, lives);
-  //   this.model.resetTime();
-  // }
+  endTimer() {
+    const time = this.model.time;
+    const lives = this.model.lives;
+    clearTimeout(this._timer);
+    this.updateHeader(time, lives);
+    this.model.resetTime();
+  }
 
   endGame() {
-    // clearTimeout(this._timer);
     const name = this.model.name;
     const answers = this.model.answers;
     const lives = this.model.lives;
@@ -75,7 +70,7 @@ export default class Presenter {
   }
 
   changeQuestion(isCurrentAnswerCorrect = false) {
-    // this.endTimer();
+    this.endTimer();
     const time = this.model.time;
     const lives = this.model.lives;
     const answerType = defineAnswer(isCurrentAnswerCorrect, time);
@@ -88,14 +83,13 @@ export default class Presenter {
     if (this.model.canContinue() && this.model.hasNextQuestion()) {
       this.model.currentQuestion = this.model.currentQuestion + 1;
 
-      // this.model.resetTime();
+      this.model.resetTime();
       this.updateHeader(time, lives);
       this.updateGameContent();
 
-      // this.startTimer();
+      this.startTimer();
     } else {
       this.model.deactivateGameState();
-      // clearTimeout(this._timer);
       this.endGame();
     }
   }
@@ -109,9 +103,8 @@ export default class Presenter {
     const {type, options} = questions[currentQuestion];
 
     clearChildren(this.gameElement);
-    this.gameElement.appendChild(
-        new HeaderView(this.resetGame, time, lives).element
-    );
+    this.header = new HeaderView(this.resetGame, time, lives).element;
+    this.gameElement.appendChild(this.header);
     this.gameElement.appendChild(
         getQuestionContainer(
             type,
@@ -127,6 +120,6 @@ export default class Presenter {
     this.model.activateGameState();
     this.updateGameContent();
     changeScreen(this.gameElement);
-    // this.startTimer();
+    this.startTimer();
   }
 }
