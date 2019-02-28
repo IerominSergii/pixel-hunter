@@ -1,4 +1,4 @@
-import {getInitialState} from "./configuration";
+import {getInitialState} from "./../configuration";
 
 export default (state) => {
   const {questions} = state;

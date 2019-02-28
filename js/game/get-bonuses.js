@@ -1,4 +1,4 @@
-import {bonusValue, answersTypes} from "./configuration";
+import {bonusValue, answersTypes} from "../configuration";
 
 const getPointBonus = (answers) => {
   const bonuses = {

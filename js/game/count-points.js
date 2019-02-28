@@ -1,6 +1,6 @@
 import isLose from "./is-lose";
 import getBonuses from "./get-bonuses";
-import {bonusValue, answersTypes} from "./configuration";
+import {bonusValue, answersTypes} from "./../configuration";
 
 const getTotalResults = (answers, lives) => {
   const bonus = getBonuses(answers, lives);

@@ -5,47 +5,47 @@ import {createElement} from "../util/util";
 const TOTAL_LIVES_AMOUNT = 3;
 
 export default class HeaderView extends AbstractView {
-  constructor(callback, timer = false, lives = false) {
+  constructor(callback, time = false, lives = false) {
     super();
-    this.timer = timer;
+    this.time = time;
     this.lives = lives;
     this.onBackButtonClick = callback;
   }
 
   getTimerTemplate() {
-    return this.timer !== false
-      ? `<div class="game__timer">${this.timer}</div>`
+    return this.time !== false
+      ? `<div class="game__timer">${this.time}</div>`
       : ``;
   }
 
   getLivesTemplate() {
-    return this.lives !== false
-      ? `<div class="game__lives">
-    ${new Array(this.lives)
-      .fill(
-          `<img
-    src="img/heart__full.svg"
-    class="game__heart"
-    alt="Life"
-    width="31"
-    height="27"
-  />`
-      )
-      .join(``)}
-  
-      ${new Array(TOTAL_LIVES_AMOUNT - this.lives)
+    return this.lives === false || this.lives === -1
+      ? ``
+      : `<div class="game__lives">
+      ${new Array(this.lives)
         .fill(
             `<img
-      src="img/heart__empty.svg"
+      src="img/heart__full.svg"
       class="game__heart"
-      alt=" Missed Life"
+      alt="Life"
       width="31"
       height="27"
     />`
         )
         .join(``)}
-  </div>`
-      : ``;
+    
+        ${new Array(TOTAL_LIVES_AMOUNT - this.lives)
+          .fill(
+              `<img
+        src="img/heart__empty.svg"
+        class="game__heart"
+        alt=" Missed Life"
+        width="31"
+        height="27"
+      />`
+          )
+          .join(``)}
+    </div>`;
   }
 
   get template() {

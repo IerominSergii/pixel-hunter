@@ -1,12 +1,8 @@
-import AbstractView from "../views/abstract-view";
-import {createElement} from "../util/util";
+import AbstractView from "../../views/abstract-view";
+import {createElement} from "../../util/util";
+import Application from "../../application";
 
 export default class GreetingView extends AbstractView {
-  constructor(callback) {
-    super();
-    this.continueClickHandler = callback;
-  }
-
   get template() {
     return `<img
       class="greeting__logo"
@@ -52,6 +48,8 @@ export default class GreetingView extends AbstractView {
       `central--blur`
     ]);
   }
+
+  continueClickHandler() {}
 
   bind() {
     const greetingContinue = this._element.querySelector(`.greeting__continue`);

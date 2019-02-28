@@ -1,6 +1,6 @@
 import {assert} from "chai";
-import setUserName from "./../game/set-user-name";
-import {getInitialState} from "./configuration";
+import setUserName from "./../game/set-name";
+import {getInitialState} from "./../configuration";
 
 describe(`setUserName`, () => {
   it(`should set new userName`, () => {

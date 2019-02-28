@@ -1,6 +1,6 @@
 import {assert} from "chai";
 import setCurrentQuestion from "./set-current-question";
-import {getInitialState} from "./configuration";
+import {getInitialState} from "./../configuration";
 
 describe(`setCurrentQuestion`, () => {
   it(`shouldn't be negative`, () => {

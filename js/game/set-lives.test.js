@@ -1,6 +1,6 @@
 import {assert} from "chai";
 import setLives from "./set-lives";
-import {getInitialState} from "./configuration";
+import {getInitialState} from "./../configuration";
 
 const state = getInitialState();
 

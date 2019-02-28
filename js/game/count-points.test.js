@@ -21,13 +21,19 @@ describe(`countPoints. Correct results:`, () => {
     const answers = correctAnswers;
     const lives = 0;
 
-    assert.equal(countPoints(answers, lives, questionsAmount), 1000);
+    assert.equal(
+        countPoints(answers, lives, questionsAmount).final.value,
+        1000
+    );
   });
   it(`should return 1050 if all answers are correct. Left lives - 1.`, () => {
     const answers = correctAnswers;
     const lives = 1;
 
-    assert.equal(countPoints(answers, lives, questionsAmount), 1050);
+    assert.equal(
+        countPoints(answers, lives, questionsAmount).final.value,
+        1050
+    );
   });
   it(`should return 1200 if all answers are correct. Left lives - 3.`, () => {
     const answers = [
@@ -44,12 +50,15 @@ describe(`countPoints. Correct results:`, () => {
     ];
     const lives = 3;
 
-    assert.equal(countPoints(answers, lives, questionsAmount), 1200);
+    assert.equal(
+        countPoints(answers, lives, questionsAmount).final.value,
+        1200
+    );
   });
   it(`should return '-1' if the answers amount is less than questionsAmount.`, () => {
     const answers = [`wrong`, `wrong`, `wrong`, `wrong`];
     const lives = -1;
 
-    assert.equal(countPoints(answers, lives, questionsAmount), -1);
+    assert.equal(countPoints(answers, lives, questionsAmount).final.value, -1);
   });
 });

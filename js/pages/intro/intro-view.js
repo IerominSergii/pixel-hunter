@@ -1,5 +1,5 @@
-import AbstractView from "../views/abstract-view";
-import {createElement} from "../util/util";
+import AbstractView from "../../views/abstract-view";
+import {createElement} from "../../util/util";
 
 export default class IntroView extends AbstractView {
   get template() {
@@ -7,14 +7,15 @@ export default class IntroView extends AbstractView {
     <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>`;
   }
 
-  asteriskClickHandler() {}
-
   render() {
     return createElement(this.template, `section`, `intro`);
   }
 
+  asteriskClickHandler() {}
+
   bind(element) {
     const asterisk = element.querySelector(`.intro__asterisk`);
+
     asterisk.addEventListener(`click`, this.asteriskClickHandler);
   }
 }

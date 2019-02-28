@@ -1,6 +1,6 @@
 import {assert} from "chai";
 import setAnswer from "./set-answer";
-import {getInitialState} from "./configuration";
+import {getInitialState} from "./../configuration";
 
 describe(`setAnswer`, () => {
   it(`should set new answer`, () => {

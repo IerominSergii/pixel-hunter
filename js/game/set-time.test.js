@@ -1,10 +1,10 @@
 import {assert} from "chai";
-import setTimerTime from "./set-timer-time";
-import {getInitialState} from "./configuration";
+import setTimerTime from "./set-time";
+import {getInitialState} from "./../configuration";
 
 describe(`setTimerTime. Correct results:`, () => {
   it(`should set the time`, () => {
-    assert.equal(setTimerTime(getInitialState(), 30).timer, 30);
+    assert.equal(setTimerTime(getInitialState(), 30).time, 30);
   });
 });
 

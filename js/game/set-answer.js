@@ -1,4 +1,4 @@
-import {bonusValue} from "./configuration";
+import {bonusValue} from "./../configuration";
 
 export default (state, newAnswer) => {
   if (typeof newAnswer !== `string`) {

@@ -7,5 +7,5 @@ export default (state, timeValue) => {
     throw new Error(`Time shouldn't be negative`);
   }
 
-  return Object.freeze(Object.assign({}, state, {timer: timeValue}));
+  return Object.freeze(Object.assign({}, state, {time: timeValue}));
 };

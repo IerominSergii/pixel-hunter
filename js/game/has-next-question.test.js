@@ -1,6 +1,6 @@
 import {assert} from "chai";
 import hasNextQuestion from "./has-next-question";
-import {getInitialState} from "./configuration";
+import {getInitialState} from "./../configuration";
 import setQuestions from "./set-questions";
 import setCurrentQuestion from "./set-current-question";
 
