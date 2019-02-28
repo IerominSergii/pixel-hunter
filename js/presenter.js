@@ -15,16 +15,16 @@ export default class Presenter {
     this.header = null;
 
     this._timer = null;
-    this.resetGame = this.resetGame.bind(this);
-    this.changeQuestion = this.changeQuestion.bind(this);
+    this._resetGame = this._resetGame.bind(this);
+    this._changeQuestion = this._changeQuestion.bind(this);
   }
 
   get element() {
     return this.gameElement;
   }
 
-  resetGame() {
-    this.endTimer();
+  _resetGame() {
+    this._endTimer();
     this.model.deactivateGameState();
     this.model.resetState();
 
@@ -32,34 +32,34 @@ export default class Presenter {
     Application.showGreeting();
   }
 
-  updateHeader(time = false, lives = false) {
-    const newHeader = new HeaderView(this.resetGame, time, lives).element;
+  _updateHeader(time = false, lives = false) {
+    const newHeader = new HeaderView(this._resetGame, time, lives).element;
     this.gameElement.replaceChild(newHeader, this.header);
 
     this.header = newHeader;
   }
 
-  startTimer() {
+  _startTimer() {
     if (this.model.time <= 0) {
-      this.changeQuestion(false);
+      this._changeQuestion(false);
     } else {
       this._timer = setTimeout(() => {
         this.model.tick();
-        this.updateHeader(this.model.time, this.model.lives);
-        this.startTimer();
+        this._updateHeader(this.model.time, this.model.lives);
+        this._startTimer();
       }, ONE_SECOND);
     }
   }
 
-  endTimer() {
+  _endTimer() {
     const time = this.model.time;
     const lives = this.model.lives;
     clearTimeout(this._timer);
-    this.updateHeader(time, lives);
+    this._updateHeader(time, lives);
     this.model.resetTime();
   }
 
-  endGame() {
+  _endGame() {
     const name = this.model.name;
     const answers = this.model.answers;
     const lives = this.model.lives;
@@ -69,8 +69,8 @@ export default class Presenter {
     Application.showStats(name, answers, lives, results);
   }
 
-  changeQuestion(isCurrentAnswerCorrect = false) {
-    this.endTimer();
+  _changeQuestion(isCurrentAnswerCorrect = false) {
+    this._endTimer();
     const time = this.model.time;
     const lives = this.model.lives;
     const answerType = defineAnswer(isCurrentAnswerCorrect, time);
@@ -84,17 +84,17 @@ export default class Presenter {
       this.model.currentQuestion = this.model.currentQuestion + 1;
 
       this.model.resetTime();
-      this.updateHeader(time, lives);
-      this.updateGameContent();
+      this._updateHeader(time, lives);
+      this._updateGameContent();
 
-      this.startTimer();
+      this._startTimer();
     } else {
       this.model.deactivateGameState();
-      this.endGame();
+      this._endGame();
     }
   }
 
-  updateGameContent() {
+  _updateGameContent() {
     const time = this.model.time;
     const lives = this.model.lives;
     const answers = this.model.answers;
@@ -103,7 +103,7 @@ export default class Presenter {
     const {type, options} = questions[currentQuestion];
 
     clearChildren(this.gameElement);
-    this.header = new HeaderView(this.resetGame, time, lives).element;
+    this.header = new HeaderView(this._resetGame, time, lives).element;
     this.gameElement.appendChild(this.header);
     this.gameElement.appendChild(
         getQuestionContainer(
@@ -111,15 +111,15 @@ export default class Presenter {
             options,
             answers,
             questions,
-            this.changeQuestion
+            this._changeQuestion
         )
     );
   }
 
   playGame() {
     this.model.activateGameState();
-    this.updateGameContent();
+    this._updateGameContent();
     changeScreen(this.gameElement);
-    this.startTimer();
+    this._startTimer();
   }
 }
