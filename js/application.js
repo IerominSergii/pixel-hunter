@@ -1,17 +1,26 @@
 import {changeScreen} from "./util/util";
 import Model from "./model";
-import questionsData from "./data/data";
+
 import Presenter from "./presenter";
 import introPresenter from "./pages/intro/intro-presenter";
 import greetingPresenter from "./pages/greeting/greeting-presenter";
 import rulesPresenter from "./pages/rules/rules-presenter";
 import statsPresenter from "./pages/stats/stats-presenter";
 
-const questions = questionsData();
+// const questions = questionsData();
+let questions;
 
 export default class Application {
   static showIntro() {
     changeScreen(introPresenter());
+    const serverQuestions = fetch(
+        `https://es.dump.academy/pixel-hunter/questions`
+    );
+
+    serverQuestions.then((response) => {
+      questions = response;
+      Application.showGreeting();
+    });
   }
 
   static showGreeting() {

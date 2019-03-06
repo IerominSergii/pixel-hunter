@@ -1,6 +1,5 @@
 import AbstractView from "../../views/abstract-view";
 import {createElement} from "../../util/util";
-import Application from "../../application";
 
 export default class GreetingView extends AbstractView {
   get template() {
