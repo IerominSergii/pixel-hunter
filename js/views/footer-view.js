@@ -72,7 +72,7 @@ export default class FooterView extends AbstractView {
     </div>`;
   }
 
-  render() {
+  _render() {
     return createElement(this.template, `footer`, `footer`);
   }
 }

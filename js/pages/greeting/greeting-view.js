@@ -41,7 +41,7 @@ export default class GreetingView extends AbstractView {
     </button>`;
   }
 
-  render() {
+  _render() {
     return createElement(this.template, `section`, [
       `greeting`,
       `central--blur`
@@ -50,7 +50,7 @@ export default class GreetingView extends AbstractView {
 
   continueClickHandler() {}
 
-  bind() {
+  _bind() {
     const greetingContinue = this._element.querySelector(`.greeting__continue`);
 
     greetingContinue.addEventListener(`click`, this.continueClickHandler);

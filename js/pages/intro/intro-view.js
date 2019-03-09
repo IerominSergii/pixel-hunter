@@ -7,13 +7,13 @@ export default class IntroView extends AbstractView {
     <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>`;
   }
 
-  render() {
+  _render() {
     return createElement(this.template, `section`, `intro`);
   }
 
   asteriskClickHandler() {}
 
-  bind(element) {
+  _bind(element) {
     const asterisk = element.querySelector(`.intro__asterisk`);
 
     asterisk.addEventListener(`click`, this.asteriskClickHandler);

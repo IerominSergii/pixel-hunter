@@ -31,11 +31,11 @@ export default class BackButton extends AbstractView {
 
   onButtonClick() {}
 
-  render() {
+  _render() {
     return createElement(this.template, `button`, `back`);
   }
 
-  bind() {
+  _bind() {
     this._element.addEventListener(`click`, this.onButtonClick);
   }
 }

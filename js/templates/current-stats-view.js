@@ -7,13 +7,13 @@ export default class CurrentStats extends AbstractView {
     this.questionsAmount = questionsAmount;
   }
 
-  renderAnswerStats(answer) {
+  _renderAnswerStats(answer) {
     return `<li class="stats__result stats__result--${answer}"></li>`;
   }
 
   get template() {
     return `<ul class="stats">
-  ${this.answers.map(this.renderAnswerStats).join(``)}
+  ${this.answers.map(this._renderAnswerStats).join(``)}
   ${new Array(this.questionsAmount - this.answers.length)
     .fill(`<li class="stats__result stats__result--unknown"></li>`)
     .join(``)}

@@ -11,7 +11,7 @@ export default class AbstractView {
     throw new Error(`Template is required`);
   }
 
-  render() {
+  _render() {
     return createElement(this.template);
   }
 
@@ -20,12 +20,12 @@ export default class AbstractView {
       return this._element;
     }
 
-    this._element = this.render();
-    this.bind(this._element);
+    this._element = this._render();
+    this._bind(this._element);
     return this._element;
   }
 
-  bind() {
+  _bind() {
     // bind handlers if required
   }
 }

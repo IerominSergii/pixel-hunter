@@ -3,13 +3,13 @@ import HeaderView from "../../views/header-view";
 import {answersTypes} from "../../configuration";
 import {createElement} from "../../util/util";
 
-const SHOW_RESULTS = 2;
+const SHOW_RESULTS = 4;
 
 export default class StatsView extends AbstractView {
   constructor(name, data) {
     super();
     this.name = name;
-    this.data = data.slice(SHOW_RESULTS);
+    this.data = data.reverse().slice(0, SHOW_RESULTS);
     this.data[0].firstResult = true;
     this._playerTemplate = (result) => this._getPlayerTemplate(result);
   }
@@ -94,17 +94,15 @@ export default class StatsView extends AbstractView {
   }
 
   get template() {
-    return this.data
-      .map((it) => {
-        return `${this._getTitleTemplate(it)}
+    return this.data.map((it) => {
+      return `${this._getTitleTemplate(it)}
       ${this._playerTemplate(it)}`;
-      })
-      .reverse();
+    });
   }
 
   onBackButtonClick() {}
 
-  render() {
+  _render() {
     const statsContainer = createElement();
 
     statsContainer.appendChild(new HeaderView(this.onBackButtonClick).element);
