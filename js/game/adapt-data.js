@@ -9,11 +9,16 @@ export default (questions) => {
     "one-of-three": `triple`
   };
 
+  const answersTypes = {
+    photo: `photo`,
+    painting: `paint`
+  };
+
   return questions.map((question) => {
     const newQuestion = {};
     newQuestion.type = questionsTypes[question.type];
     newQuestion.options = question.answers.map((answer) => {
-      return {src: answer.image.url, thisIs: answer.type};
+      return {src: answer.image.url, thisIs: answersTypes[answer.type]};
     });
 
     return newQuestion;

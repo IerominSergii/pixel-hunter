@@ -80,7 +80,7 @@ const localData = [
       },
       {
         src: `http://placehold.it/468x458`,
-        thisIs: `painting`
+        thisIs: `paint`
       }
     ]
   },
@@ -102,7 +102,7 @@ const localData = [
       },
       {
         src: `http://placehold.it/304x455`,
-        thisIs: `painting`
+        thisIs: `paint`
       },
       {
         src: `http://placehold.it/304x455`,

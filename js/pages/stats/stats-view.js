@@ -3,26 +3,26 @@ import HeaderView from "../../views/header-view";
 import {answersTypes} from "../../configuration";
 import {createElement} from "../../util/util";
 
+const SHOW_RESULTS = 2;
+
 export default class StatsView extends AbstractView {
-  constructor(name, answers, lives, results) {
+  constructor(name, data) {
     super();
     this.name = name;
-    this.answers = answers;
-    this.lives = lives;
-    this.results = results;
-    this.finalResult = results.final.value;
-    this._playerTemplate = () => this._getPlayerTemplate();
+    this.data = data.slice(SHOW_RESULTS);
+    this.data[0].firstResult = true;
+    this._playerTemplate = (result) => this._getPlayerTemplate(result);
   }
 
-  _getTitleTemplate() {
+  _getTitleTemplate(data) {
     return `<h2 class="result__title">${
-      this.results.final.value === -1 ? `Проиграл.` : `Победа!`
+      data.results.final.value === -1 ? `Проиграл.` : `Победа!`
     }</h2>`;
   }
 
-  _getAnswersTemplate() {
+  _getAnswersTemplate(data) {
     return `<ul class="stats">
-    ${this.answers
+    ${data.answers
       .map((answer) => {
         return `<li class="stats__result stats__result--${
           answersTypes[answer.toUpperCase()]
@@ -32,8 +32,8 @@ export default class StatsView extends AbstractView {
   </ul>`;
   }
 
-  _getDetailsTemplate() {
-    if (this.results.final.value === -1) {
+  _getDetailsTemplate(data) {
+    if (data.results.final.value === -1) {
       return ``;
     }
 
@@ -43,8 +43,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         1 <span class="stats__result stats__result--fast"></span>
       </td>
-      <td class="result__points">${this.results.fast.amount} × 50</td>
-      <td class="result__total">${this.results.fast.value}</td>
+      <td class="result__points">${data.results.fast.amount} × 50</td>
+      <td class="result__total">${data.results.fast.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -52,8 +52,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--alive"></span>
       </td>
-      <td class="result__points">${this.lives} × 50</td>
-      <td class="result__total">${this.results.life.value}</td>
+      <td class="result__points">${data.lives} × 50</td>
+      <td class="result__total">${data.results.life.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -61,37 +61,45 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         3 <span class="stats__result stats__result--slow"></span>
       </td>
-      <td class="result__points">${this.results.slow.amount} × 50</td>
-      <td class="result__total">-${this.results.slow.value}</td>
+      <td class="result__points">${data.results.slow.amount} × 50</td>
+      <td class="result__total">-${data.results.slow.value}</td>
     </tr>`;
   }
 
-  _getPlayerTemplate() {
+  _getPlayerTemplate(data) {
     return `<table class="result__table">
     <tr>
-      <td class="result__number">1. ${this.name}</td>
+      <td class="result__number">1. ${data.name}</td>
       <td colspan="2">
-      ${this._getAnswersTemplate()}
+      ${this._getAnswersTemplate(data)}
       </td>
       <td class="result__points">${
-  this.finalResult === -1 ? this.finalResult : this.results.total.amount
+  data.results.final.value === -1
+    ? data.results.final.value
+    : data.results.total.amount
 } × 100</td>
       <td class="result__total">${
-  this.finalResult === -1 ? this.finalResult : this.results.total.value
+  data.results.final.value === -1
+    ? data.results.final.value
+    : data.results.total.value
 }</td>
     </tr>
-    ${this._getDetailsTemplate()}
+    ${data.firstResult ? this._getDetailsTemplate(data) : ``}
     <tr>
       <td colspan="5" class="result__total  result__total--final">${
-  this.finalResult
+  data.results.final.value
 }</td>
     </tr>
   </table>`;
   }
 
   get template() {
-    return `${this._getTitleTemplate()}
-    ${this._playerTemplate()}`;
+    return this.data
+      .map((it) => {
+        return `${this._getTitleTemplate(it)}
+      ${this._playerTemplate(it)}`;
+      })
+      .reverse();
   }
 
   onBackButtonClick() {}

@@ -6,21 +6,19 @@ import introPresenter from "./pages/intro/intro-presenter";
 import greetingPresenter from "./pages/greeting/greeting-presenter";
 import rulesPresenter from "./pages/rules/rules-presenter";
 import statsPresenter from "./pages/stats/stats-presenter";
+import Loader from "./game/loader";
 
-// const questions = questionsData();
 let questions;
 
 export default class Application {
   static showIntro() {
     changeScreen(introPresenter());
-    const serverQuestions = fetch(
-        `https://es.dump.academy/pixel-hunter/questions`
-    );
 
-    serverQuestions.then((response) => {
-      questions = response;
-      Application.showGreeting();
-    });
+    Loader.loadData()
+      .then((data) => {
+        questions = data;
+      })
+      .then(Application.showGreeting());
   }
 
   static showGreeting() {
@@ -41,7 +39,15 @@ export default class Application {
     presenter.playGame();
   }
 
-  static showStats(name, answers, lives, results) {
-    changeScreen(statsPresenter(name, answers, lives, results));
+  static showStats(name, answers, lives, questionsLength) {
+    const resultData = {
+      answers,
+      lives
+    };
+    Loader.saveResults(resultData, name)
+      .then(() => Loader.loadResults(name))
+      .then((data) => {
+        changeScreen(statsPresenter(name, data, questionsLength));
+      });
   }
 }
