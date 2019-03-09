@@ -35,11 +35,11 @@ export default class Loader {
       .then(toJson);
   }
 
-  static saveResults(data, name = DEFAUL_NAME) {
-    data = Object.assign({}, data, {name});
+  static saveResults(results, name = DEFAUL_NAME) {
+    const totalResults = Object.assign({}, results, {name});
 
     const requestSettings = {
-      body: JSON.stringify(data),
+      body: JSON.stringify(totalResults),
       headers: {
         "Content-Type": `application/json`
       },

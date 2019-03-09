@@ -15,8 +15,8 @@ export default class Application {
     changeScreen(introPresenter());
 
     Loader.loadData()
-      .then((data) => {
-        questions = data;
+      .then((questionsData) => {
+        questions = questionsData;
       })
       .then(Application.showGreeting());
   }
@@ -40,14 +40,14 @@ export default class Application {
   }
 
   static showStats(name, answers, lives, questionsLength) {
-    const resultData = {
+    const result = {
       answers,
       lives
     };
-    Loader.saveResults(resultData, name)
+    Loader.saveResults(result, name)
       .then(() => Loader.loadResults(name))
-      .then((data) => {
-        changeScreen(statsPresenter(name, data, questionsLength));
+      .then((allResults) => {
+        changeScreen(statsPresenter(name, allResults, questionsLength));
       });
   }
 }

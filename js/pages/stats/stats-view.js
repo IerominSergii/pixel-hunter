@@ -6,23 +6,22 @@ import {createElement} from "../../util/util";
 const SHOW_RESULTS = 4;
 
 export default class StatsView extends AbstractView {
-  constructor(name, data) {
+  constructor(name, gamesResultsData) {
     super();
     this.name = name;
-    this.data = data.reverse().slice(0, SHOW_RESULTS);
-    this.data[0].firstResult = true;
+    this.gamesResultsData = gamesResultsData.reverse().slice(0, SHOW_RESULTS);
     this._playerTemplate = (result) => this._getPlayerTemplate(result);
   }
 
-  _getTitleTemplate(data) {
+  _getTitleTemplate(gameResults) {
     return `<h2 class="result__title">${
-      data.results.final.value === -1 ? `Проиграл.` : `Победа!`
+      gameResults.results.final.value === -1 ? `Проиграл.` : `Победа!`
     }</h2>`;
   }
 
-  _getAnswersTemplate(data) {
+  _getAnswersTemplate(gameResults) {
     return `<ul class="stats">
-    ${data.answers
+    ${gameResults.answers
       .map((answer) => {
         return `<li class="stats__result stats__result--${
           answersTypes[answer.toUpperCase()]
@@ -32,10 +31,13 @@ export default class StatsView extends AbstractView {
   </ul>`;
   }
 
-  _getDetailsTemplate(data) {
-    if (data.results.final.value === -1) {
+  _getDetailsTemplate(gameResults) {
+    if (gameResults.results.final.value === -1) {
       return ``;
     }
+
+    const {results, lives} = gameResults;
+    const {fast, life, slow} = results;
 
     return `<tr>
       <td></td>
@@ -43,8 +45,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         1 <span class="stats__result stats__result--fast"></span>
       </td>
-      <td class="result__points">${data.results.fast.amount} × 50</td>
-      <td class="result__total">${data.results.fast.value}</td>
+      <td class="result__points">${fast.amount} × 50</td>
+      <td class="result__total">${fast.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -52,8 +54,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--alive"></span>
       </td>
-      <td class="result__points">${data.lives} × 50</td>
-      <td class="result__total">${data.results.life.value}</td>
+      <td class="result__points">${lives} × 50</td>
+      <td class="result__total">${life.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -61,42 +63,41 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         3 <span class="stats__result stats__result--slow"></span>
       </td>
-      <td class="result__points">${data.results.slow.amount} × 50</td>
-      <td class="result__total">-${data.results.slow.value}</td>
+      <td class="result__points">${slow.amount} × 50</td>
+      <td class="result__total">-${slow.value}</td>
     </tr>`;
   }
 
-  _getPlayerTemplate(data) {
+  _getPlayerTemplate(gameResults) {
+    const {results, name} = gameResults;
+    const {final, total} = results;
+
     return `<table class="result__table">
     <tr>
-      <td class="result__number">1. ${data.name}</td>
+      <td class="result__number">1. ${name}</td>
       <td colspan="2">
-      ${this._getAnswersTemplate(data)}
+      ${this._getAnswersTemplate(gameResults)}
       </td>
       <td class="result__points">${
-  data.results.final.value === -1
-    ? data.results.final.value
-    : data.results.total.amount
+  final.value === -1 ? final.value : total.amount
 } × 100</td>
       <td class="result__total">${
-  data.results.final.value === -1
-    ? data.results.final.value
-    : data.results.total.value
+  final.value === -1 ? final.value : total.value
 }</td>
     </tr>
-    ${data.firstResult ? this._getDetailsTemplate(data) : ``}
+    ${this._getDetailsTemplate(gameResults)}
     <tr>
       <td colspan="5" class="result__total  result__total--final">${
-  data.results.final.value
+  final.value
 }</td>
     </tr>
   </table>`;
   }
 
   get template() {
-    return this.data.map((it) => {
-      return `${this._getTitleTemplate(it)}
-      ${this._playerTemplate(it)}`;
+    return this.gamesResultsData.map((gameResults) => {
+      return `${this._getTitleTemplate(gameResults)}
+      ${this._playerTemplate(gameResults)}`;
     });
   }
 
