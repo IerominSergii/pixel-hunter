@@ -27,3 +27,7 @@ export const changeScreen = (newScreen) => {
   clearChildren(main);
   main.appendChild(newScreen);
 };
+
+export const addModal = (modal) => {
+  main.appendChild(modal);
+};

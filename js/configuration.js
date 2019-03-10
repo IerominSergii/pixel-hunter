@@ -1,5 +1,5 @@
 const DEFAULT_LIVES_AMOUNT = 3;
-export const DEFAULT_TIMER = 4;
+export const DEFAULT_TIMER = 30;
 
 export const getInitialState = () => {
   return Object.freeze({

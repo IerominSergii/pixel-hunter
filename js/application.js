@@ -1,4 +1,4 @@
-import {changeScreen} from "./util/util";
+import {changeScreen, addModal} from "./util/util";
 import Model from "./model";
 
 import Presenter from "./presenter";
@@ -7,6 +7,7 @@ import greetingPresenter from "./pages/greeting/greeting-presenter";
 import rulesPresenter from "./pages/rules/rules-presenter";
 import statsPresenter from "./pages/stats/stats-presenter";
 import Loader from "./game/loader";
+import ErrorView from "./views/modals/error-view";
 
 let questions;
 
@@ -18,7 +19,8 @@ export default class Application {
       .then((questionsData) => {
         questions = questionsData;
       })
-      .then(Application.showGreeting());
+      .then(Application.showGreeting)
+      .catch(Application.showError);
   }
 
   static showGreeting() {
@@ -49,5 +51,10 @@ export default class Application {
       .then((allResults) => {
         changeScreen(statsPresenter(name, allResults, questionsLength));
       });
+  }
+
+  static showError() {
+    const errorView = new ErrorView();
+    addModal(errorView.element);
   }
 }
