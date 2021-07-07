@@ -5,10 +5,10 @@ export default class QuestionTripleView extends AbstractView {
     super();
     this.options = options;
     this.onClick = callback;
-    this.userChoice = (evt) => this.userChoiceHandler(evt);
+    this._userChoice = (evt) => this._userChoiceHandler(evt);
   }
 
-  getOptionTemplate(option, index) {
+  _getOptionTemplate(option, index) {
     return `<div class="game__option">
     <img
       src="${option.src}"
@@ -23,18 +23,18 @@ export default class QuestionTripleView extends AbstractView {
   get template() {
     return `<p class="game__task">Найдите рисунок среди изображений</p>
     <form class="game__content  game__content--triple">
-    ${this.options.map(this.getOptionTemplate).join(``)}  
+    ${this.options.map(this._getOptionTemplate).join(``)}  
   </form>`;
   }
 
-  userChoiceHandler(evt) {
+  _userChoiceHandler(evt) {
     const index = evt.target.getAttribute(`data-answer`);
     this.onClick(this.options[index].thisIs === `paint`);
   }
 
-  bind(element) {
+  _bind(element) {
     element
       .querySelector(`.game__content`)
-      .addEventListener(`click`, this.userChoice);
+      .addEventListener(`click`, this._userChoice);
   }
 }

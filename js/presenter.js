@@ -4,7 +4,6 @@ import HeaderView from "./views/header-view";
 
 import getQuestionContainer from "./game/get-question-container";
 import defineAnswer from "./game/define-answer";
-import countPoints from "./game/count-points";
 import Application from "./application";
 
 const ONE_SECOND = 1000;
@@ -64,9 +63,8 @@ export default class Presenter {
     const answers = this.model.answers;
     const lives = this.model.lives;
     const questions = this.model.questions;
-    const results = countPoints(answers, lives, questions.length);
 
-    Application.showStats(name, answers, lives, results);
+    Application.showStats(name, answers, lives, questions.length);
   }
 
   _changeQuestion(isCurrentAnswerCorrect = false) {

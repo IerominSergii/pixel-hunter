@@ -52,7 +52,7 @@ export default class RulesView extends AbstractView {
     input.addEventListener(`input`, rulesInputInputHandler);
   }
 
-  render() {
+  _render() {
     const rulesContainer = createElement();
 
     rulesContainer.appendChild(
@@ -66,7 +66,7 @@ export default class RulesView extends AbstractView {
 
   onSubmit() {}
 
-  bind(element) {
+  _bind(element) {
     const rulesForm = element.querySelector(`.rules__form`);
     const rulesInput = rulesForm.querySelector(`.rules__input`);
     const rulesButton = rulesForm.querySelector(`.rules__button`);

@@ -12,13 +12,13 @@ export default class HeaderView extends AbstractView {
     this.onBackButtonClick = callback;
   }
 
-  getTimerTemplate() {
+  _getTimerTemplate() {
     return this.time !== false
       ? `<div class="game__timer">${this.time}</div>`
       : ``;
   }
 
-  getLivesTemplate() {
+  _getLivesTemplate() {
     return this.lives === false || this.lives === -1
       ? ``
       : `<div class="game__lives">
@@ -49,11 +49,11 @@ export default class HeaderView extends AbstractView {
   }
 
   get template() {
-    return `${this.getTimerTemplate()}
-    ${this.getLivesTemplate()}`;
+    return `${this._getTimerTemplate()}
+    ${this._getLivesTemplate()}`;
   }
 
-  render() {
+  _render() {
     return createElement(this.template, `header`, `header`);
   }
 
@@ -63,7 +63,7 @@ export default class HeaderView extends AbstractView {
     }
 
     const backButton = new BackButton(this.onBackButtonClick);
-    this._element = this.render();
+    this._element = this._render();
     this._element.prepend(backButton.element);
 
     return this._element;

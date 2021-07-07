@@ -5,12 +5,12 @@ export default class QuestionTwice extends AbstractView {
     super();
     this.options = options;
     this.userChoiceHandler = callback;
-    this.onChange = () => {
-      this.gameContentChangeHandler();
+    this._onChange = () => {
+      this._gameContentChangeHandler();
     };
   }
 
-  getOptionTemplate(option, index) {
+  _getOptionTemplate(option, index) {
     return `<div class="game__option">
       <img
         src="${option.src}"
@@ -44,11 +44,11 @@ export default class QuestionTwice extends AbstractView {
     Угадайте для каждого изображения фото или рисунок?
   </p>
   <form class="game__content">
-    ${this.options.map(this.getOptionTemplate).join(``)}
+    ${this.options.map(this._getOptionTemplate).join(``)}
   </form>`;
   }
 
-  gameContentChangeHandler() {
+  _gameContentChangeHandler() {
     const answerValues = Array.from(
         document.querySelectorAll(`input:checked`)
     ).map((input) => {
@@ -64,9 +64,9 @@ export default class QuestionTwice extends AbstractView {
     }
   }
 
-  bind(element) {
+  _bind(element) {
     element
       .querySelector(`.game__content`)
-      .addEventListener(`change`, this.onChange);
+      .addEventListener(`change`, this._onChange);
   }
 }

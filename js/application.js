@@ -1,17 +1,26 @@
-import {changeScreen} from "./util/util";
+import {changeScreen, addModal} from "./util/util";
 import Model from "./model";
-import questionsData from "./data/data";
+
 import Presenter from "./presenter";
 import introPresenter from "./pages/intro/intro-presenter";
 import greetingPresenter from "./pages/greeting/greeting-presenter";
 import rulesPresenter from "./pages/rules/rules-presenter";
 import statsPresenter from "./pages/stats/stats-presenter";
+import Loader from "./game/loader";
+import ErrorView from "./views/modals/error-view";
 
-const questions = questionsData();
+let questions;
 
 export default class Application {
   static showIntro() {
     changeScreen(introPresenter());
+
+    Loader.loadData()
+      .then((questionsData) => {
+        questions = questionsData;
+      })
+      .then(Application.showGreeting)
+      .catch(Application.showError);
   }
 
   static showGreeting() {
@@ -32,7 +41,20 @@ export default class Application {
     presenter.playGame();
   }
 
-  static showStats(name, answers, lives, results) {
-    changeScreen(statsPresenter(name, answers, lives, results));
+  static showStats(name, answers, lives, questionsLength) {
+    const result = {
+      answers,
+      lives
+    };
+    Loader.saveResults(result, name)
+      .then(() => Loader.loadResults(name))
+      .then((allResults) => {
+        changeScreen(statsPresenter(name, allResults, questionsLength));
+      });
+  }
+
+  static showError() {
+    const errorView = new ErrorView();
+    addModal(errorView.element);
   }
 }

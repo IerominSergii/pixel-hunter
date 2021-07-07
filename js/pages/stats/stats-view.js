@@ -3,26 +3,25 @@ import HeaderView from "../../views/header-view";
 import {answersTypes} from "../../configuration";
 import {createElement} from "../../util/util";
 
+const SHOW_RESULTS = 4;
+
 export default class StatsView extends AbstractView {
-  constructor(name, answers, lives, results) {
+  constructor(name, gamesResultsData) {
     super();
     this.name = name;
-    this.answers = answers;
-    this.lives = lives;
-    this.results = results;
-    this.finalResult = results.final.value;
-    this._playerTemplate = () => this._getPlayerTemplate();
+    this.gamesResultsData = gamesResultsData.reverse().slice(0, SHOW_RESULTS);
+    this._playerTemplate = (result) => this._getPlayerTemplate(result);
   }
 
-  _getTitleTemplate() {
+  _getTitleTemplate(gameResults) {
     return `<h2 class="result__title">${
-      this.results.final.value === -1 ? `Проиграл.` : `Победа!`
+      gameResults.results.final.value === -1 ? `Проиграл.` : `Победа!`
     }</h2>`;
   }
 
-  _getAnswersTemplate() {
+  _getAnswersTemplate(gameResults) {
     return `<ul class="stats">
-    ${this.answers
+    ${gameResults.answers
       .map((answer) => {
         return `<li class="stats__result stats__result--${
           answersTypes[answer.toUpperCase()]
@@ -32,10 +31,13 @@ export default class StatsView extends AbstractView {
   </ul>`;
   }
 
-  _getDetailsTemplate() {
-    if (this.results.final.value === -1) {
+  _getDetailsTemplate(gameResults) {
+    if (gameResults.results.final.value === -1) {
       return ``;
     }
+
+    const {results, lives} = gameResults;
+    const {fast, life, slow} = results;
 
     return `<tr>
       <td></td>
@@ -43,8 +45,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         1 <span class="stats__result stats__result--fast"></span>
       </td>
-      <td class="result__points">${this.results.fast.amount} × 50</td>
-      <td class="result__total">${this.results.fast.value}</td>
+      <td class="result__points">${fast.amount} × 50</td>
+      <td class="result__total">${fast.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -52,8 +54,8 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         2 <span class="stats__result stats__result--alive"></span>
       </td>
-      <td class="result__points">${this.lives} × 50</td>
-      <td class="result__total">${this.results.life.value}</td>
+      <td class="result__points">${lives} × 50</td>
+      <td class="result__total">${life.value}</td>
       </tr>
       <tr>
       <td></td>
@@ -61,42 +63,47 @@ export default class StatsView extends AbstractView {
       <td class="result__extra">
         3 <span class="stats__result stats__result--slow"></span>
       </td>
-      <td class="result__points">${this.results.slow.amount} × 50</td>
-      <td class="result__total">-${this.results.slow.value}</td>
+      <td class="result__points">${slow.amount} × 50</td>
+      <td class="result__total">-${slow.value}</td>
     </tr>`;
   }
 
-  _getPlayerTemplate() {
+  _getPlayerTemplate(gameResults) {
+    const {results, name} = gameResults;
+    const {final, total} = results;
+
     return `<table class="result__table">
     <tr>
-      <td class="result__number">1. ${this.name}</td>
+      <td class="result__number">1. ${name}</td>
       <td colspan="2">
-      ${this._getAnswersTemplate()}
+      ${this._getAnswersTemplate(gameResults)}
       </td>
       <td class="result__points">${
-  this.finalResult === -1 ? this.finalResult : this.results.total.amount
+  final.value === -1 ? final.value : total.amount
 } × 100</td>
       <td class="result__total">${
-  this.finalResult === -1 ? this.finalResult : this.results.total.value
+  final.value === -1 ? final.value : total.value
 }</td>
     </tr>
-    ${this._getDetailsTemplate()}
+    ${this._getDetailsTemplate(gameResults)}
     <tr>
       <td colspan="5" class="result__total  result__total--final">${
-  this.finalResult
+  final.value
 }</td>
     </tr>
   </table>`;
   }
 
   get template() {
-    return `${this._getTitleTemplate()}
-    ${this._playerTemplate()}`;
+    return this.gamesResultsData.map((gameResults) => {
+      return `${this._getTitleTemplate(gameResults)}
+      ${this._playerTemplate(gameResults)}`;
+    });
   }
 
   onBackButtonClick() {}
 
-  render() {
+  _render() {
     const statsContainer = createElement();
 
     statsContainer.appendChild(new HeaderView(this.onBackButtonClick).element);

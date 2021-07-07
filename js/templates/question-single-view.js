@@ -5,7 +5,7 @@ export default class QuestionSingleView extends AbstractView {
     super();
     this.option = option;
     this.callback = callback;
-    this.onChoice = () => this.userChoiceHandler();
+    this._onChoice = () => this._userChoiceHandler();
   }
 
   get template() {
@@ -40,14 +40,14 @@ export default class QuestionSingleView extends AbstractView {
   </form>`;
   }
 
-  userChoiceHandler() {
+  _userChoiceHandler() {
     const userAnswer = document.querySelector(`input:checked`).value;
     this.callback(userAnswer === this.option.thisIs);
   }
 
-  bind(element) {
+  _bind(element) {
     element
       .querySelector(`.game__content`)
-      .addEventListener(`change`, this.onChoice);
+      .addEventListener(`change`, this._onChoice);
   }
 }
